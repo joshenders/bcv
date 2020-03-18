@@ -15,13 +15,42 @@
 ### 3. Configuración
 
 - En el teléfono, asegúrese de que la ubicación (en configuración> privacidad) esté habilitada, Y que el método de localización sea lo más alto posible (GPS y Wi-Fi)
+
 - Abra la aplicación Traccar
+
+<img src="img/a.png" height="400">
+
+
+
 - Configure el Identificador de dispositivo en _your Identification number_ (consulte la sección "Registro" más arriba para obtener una ID de dispositivo)
+
+<img src="img/b.png" height="400">
+
+
 - Establezca la dirección de la URL del servidor: `https://databrew.app`
-- Establezca el campo Frecuencia a: `60`
+
+<img src="img/c.png" height="400">
+
 - Establezca la precisión de la ubicación en: `high`
+
+<img src="img/d.png" height="400">
+
+
+- Establezca el campo Frecuencia a: `60`
+
+<img src="img/e.png" height="400">
+
+
+
 - No cambie los campos Distancia o Ángulos
+
+
 - En la parte superior establezca "Estado del servicio" en on/running
+
+<img src="img/f.png" height="400">
+
+- Ya está. Para verificar que todo está funcionando bien, puedes hacer click en "status". Debe mostrar mensajes que dicen "location update"; si dice "Send failed", vuelve a verificar los parámeteros de configuración.
+
 
 
 ### 4. Utilizar

@@ -15,15 +15,39 @@
 ### 3. Configuration
 
 - On the phone, make sure location (in settings > privacy) is enabled, AND that the locating method is as high as possible (GPS and Wi-Fi).
+
 - Open the Traccar app
+
+<img src="img/a.png" height="400">
+
+
 - Set the Device Identifier to _your Identification number_ (see the "Registration" section above to get a device ID)
-<img src="img/a.png" height="300">
+
+<img src="img/b.png" height="400">
 
 - Set the address of the server URL: `https://databrew.app`
-- Set the Frequency field to: `60`
+
+<img src="img/c.png" height="400">
+
+
 - Set location accuracy to: `high`
+
+<img src="img/d.png" height="400">
+
+
+- Set the Frequency field to: `60`
+
+<img src="img/e.png" height="400">
+
 - Do not change the Distance or Angles fields
+
 - At the top set "Service status" to on/running
+
+<img src="img/f.png" height="400">
+
+- You're all done. To check that everything is working, you can click on "status". It should say "Location update". If it says "Send failed", double check your configuration parameters.
+
+
 
 ### 4. Use
 
