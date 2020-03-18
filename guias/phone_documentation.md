@@ -1,19 +1,11 @@
 # GPS tracking
 
-## Context
-
-- You are a healthcare professional. Therefore, your risk of infection with COVID-19 is high.
-- Collecting your location data serves two purposes:
-  1. If one of your colleagues becomes ill, we will know if/when you had contact with them (and therefore, if you are at risk) and can therefore perform screening on you.
-  2. If you yourself become ill, we will know who you might have infected, and can therefore perform screening.
-
-
 ## Steps
 
 ### Registration
 
 - Before you install anything, we need to know who you are and that you are participating.
-- Please go to datacat.cc/bcv and fill out the form
+- Please go to [REGISTRATION PAGE](datacat.cc/bcv) and fill out the form
 - Please take note of the ID number you are assigned. You will need to put this into your phone (next step).
 
 ### Installation

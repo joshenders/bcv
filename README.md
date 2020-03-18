@@ -1,15 +1,21 @@
-# BCV: Busca y captura el virus (Search and arrest the virus)
+# BCV: Busca y Captura para el Virus (Search and arrest the virus)
 
 _A tool for GPS tracking of healthcare workers so as to empower and automated epidemiological contact-tracing_
 
 ## Quick-links
 
-- To register as a participant: [REGISTRATION INSTRUCTIONS](https://datacat.cc/bcv/)
-- Instructions for setting up phone after regisration: [PHONE INSTRUCTIONS](guias/phone_documentation.md)
+- To register as a participant: [REGISTRATION LINK](https://datacat.cc/bcv/)
+- Instructions for setting up phone after registration: [PHONE INSTRUCTIONS](guias/phone_documentation.md)
 
 ## Overview
 
-Healthcare workers are especially high-risk for COVID-19 infection. By extension, their contacts (including those they live with, those they treat, those from whom they shop, etc.) are also at high-risk of infection. Protecting healthcare workers’ contacts is vital to supporting their work, as well as to preventing largespread disease transmission from HCWs to society. We will passively track healthcare workers’ locations via smartphone so that when a healthcare worker tests positive, retrospective epidemiological investigation (contact-tracing) can be rapid, accurate, and automated.
+Healthcare workers are especially high-risk for COVID-19 infection. By extension, their contacts (including those they live with, those they treat, those from whom they shop, etc.) are also at high-risk of infection. Protecting healthcare workers’ contacts is vital to supporting their work, as well as to preventing large-spread disease transmission from HCWs to society. We will passively track healthcare workers’ locations via smartphone so that when a healthcare worker tests positive, retrospective epidemiological investigation (contact-tracing) can be rapid, accurate, and automated.
+
+
+- Collecting location data on healthcare workers serves two purposes:
+  1. **To protect the HCW**: If one of yotheirur colleagues becomes ill, we will know if/when the HCW had contact with them (and therefore, if the HCW is at risk and requires screening or confinement)
+  2. **To protect the HCW's contacts**: If you yourself become ill, we will know who you might have infected, and can therefore perform screening.
+
 
 ## Steps / Protocol
 
