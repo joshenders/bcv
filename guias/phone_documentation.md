@@ -17,7 +17,7 @@
 - On the phone, make sure location (in settings > privacy) is enabled, AND that the locating method is as high as possible (GPS and Wi-Fi)
 - Open the Traccar app
 - Set the Device Identifier to _your Identification number_ (see the "Registration" section above to get a device ID)
-- Set the address of the server URL: `http://databrew.app`
+- Set the address of the server URL: `https://databrew.app`
 - Set the Frequency field to: `60`
 - Set location accuracy to: `high`
 - Do not change the Distance or Angles fields

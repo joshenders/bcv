@@ -77,9 +77,11 @@ ui <- f7Page(
         br(),
         column(12,
                align = 'center',
-               actionButton('register', 'HAZ CLICK AQUÍ PARA DAR DE ALTA'),
+               actionButton('register', 'HAZ CLICK AQUÍ PARA DAR DE ALTA Y RECIBIR UN NÚMERO DE IDENTIFICACIÓN'),
                h1(textOutput('number_text')),
-               uiOutput('done_text'))
+               h2(textOutput('done_text')),
+               f7Link(label = "INSTRUCCIONES PARA INSTALAR LA APLICACIÓN EN EL MÓVIL", src = "https://github.com/databrew/bcv/blob/master/guias/phone_documentation_es.md", external = TRUE)
+               )
         
       )
     )
@@ -120,9 +122,9 @@ server <- function(input, output, session) {
     # Update done text
     is_done <- done()
     if(is_done){
-      the_text('Ahora haz clic aquí para instrucciones para descargar la aplicación en tu móvil')
+      the_text('Ahora haz clic abajo para instrucciones para descargar la aplicación en tu móvil')
     } else {
-      the_text('Hay que llenar todos los campos para poder registrar.')
+      the_text('Hay que llenar primero todos los campos para poder registrar.')
     }
     
     # Assign number
@@ -138,11 +140,10 @@ server <- function(input, output, session) {
     
   })
   
-  output$done_text <- renderUI({
+  output$done_text <- renderText({
     out <- the_text()
-    # h1(span('', style="color:red")
-# ,)
-    h1(a(out, href = paste0('https://github.com/databrew/bcv/blob/master/guias/phone_documentation.md#installation')))
+    return(out)
+    
   })
 
   output$number_text <- renderText({

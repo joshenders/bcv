@@ -141,6 +141,20 @@ sudo systemctl start traccar.service
 - Open web interface by navigating to http://localhost:8082/ (on local machine) or databrew.app (if you have already configured the below) or databrew.app:8082
 - Log in as `admin` / `admin`
 
+
+### Setting up https
+
+```
+sudo apt install nginx
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python-certbot-nginx
+sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d databrew.app
+```
+
 #### Deal with ports, nginx, etc.
 
 - Run the below:
@@ -369,7 +383,7 @@ sudo systemctl restart shiny-server;
 
 - Get a list of devices:
 ```
-http://databrew.app/api/devices
+https://databrew.app/api/devices
 ```
 etc.
 
