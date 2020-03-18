@@ -46,6 +46,23 @@ register <- function(nombre,
   }
 }
 
+# Define function for reporting case
+report <- function(case_id,
+                   case_name,
+                   case_date_symptoms,
+                   case_date_dx){
+  
+  df <- tibble(case_id,
+               case_name,
+               case_date_symptoms,
+               case_date_dx)
+  out <- dbWriteTable(conn = con,
+               name = 'cases',
+               value = df,
+               append = TRUE)
+  return(out)
+}
+
 ui = f7Page(
 
   init = f7Init(
@@ -226,7 +243,20 @@ server <- function(input, output, session) {
   
   submitted_text <- reactiveVal(value = '')
   observeEvent(input$submit_case, {
-    submitted_text('Información enviada con éxito.\nCase info successfully submitted.')
+    case_id <- input$case_id
+    case_name <- input$case_name
+    case_date_symptoms <- input$case_date_symptoms
+    case_date_dx <- input$case_date_dx
+    x <- report(case_id = case_id,
+                case_name = case_name,
+                case_date_symptoms = case_date_symptoms,
+                case_date_dx = case_date_dx)
+    if(x){
+      submitted_text('Información enviada con éxito.\nCase info successfully submitted.')  
+    } else {
+      submitted_text('Problem. Problema. Contact: joe@databrew.cc')
+    }
+    
   })
   
   output$submit_case_text <- renderText({
