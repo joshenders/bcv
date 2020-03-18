@@ -2,12 +2,13 @@
 
 _A tool for GPS tracking of healthcare workers so as to empower and automated epidemiological contact-tracing_
 
-[ESTA PÁGINA EN ESPAÑOL](README_es.md)
+[THIS PAGE IN ENGLISH](README.md)
+
 
 ## Quick-links
 
 - To register as a participant: [REGISTRATION LINK](https://datacat.cc/bcv/)
-- Instructions for setting up phone after registration: [PHONE INSTRUCTIONS](guias/phone_documentation.md)
+- Instructions for setting up phone after registration: [PHONE INSTRUCTIONS](guias/phone_documentation_es.md)
 
 ## Overview
 

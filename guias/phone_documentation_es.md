@@ -1,4 +1,4 @@
-[ESTA PÁGINA EN ESPAÑOL](phone_documentation_es.md)
+[THIS PAGE IN ENGLISH](phone_documentation.md)
 
 
 ### 1. Registration

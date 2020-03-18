@@ -381,6 +381,14 @@ show tables;
 select * from tc_positions;
 ```
 
+- Remotely:
+
+```
+mysql -h 3.130.255.155 -u bcvuser -p
+<traccarremotepass>
+use bcvdb
+```
+
 ### Troubleshooting and logs
 - See logs at `/opt/traccar/logs/tracker-server.log`
 - See more details on the [troubleshooting page](https://www.traccar.org/troubleshooting/)
