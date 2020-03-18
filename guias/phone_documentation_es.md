@@ -1,32 +1,33 @@
 [THIS PAGE IN ENGLISH](phone_documentation.md)
 
 
-### 1. Registration
+### 1. Registro
 
-- Before you install anything, we need to know who you are and that you are participating.
-- Please go to [REGISTRATION PAGE](https://datacat.cc/bcv) and fill out the form
-- Please take note of the ID number you are assigned. You will need to put this into your phone (next step).
+- Antes de instalar cualquier cosa, necesitamos saber quién es usted y si está participando.
+- Por favor ve a [REGISTRATION PAGE](https://datacat.cc/bcv) y rellena el formulario
+- Tome nota del número de identificación asignado. Deberá ponerlo en su teléfono (siguiente paso).
 
-### 2. Installation
+### 2. Instalación
 
-- *ANDROID*: Install Traccar client via the [Google Play Store](https://play.google.com/store/apps/details?id=org.traccar.client)
-- *APPLE*:Install Traccar client via the [Apple App Store](https://apps.apple.com/us/app/traccar-client/id843156974)
+- *ANDROID*: Instala Traccar client via [Google Play Store](https://play.google.com/store/apps/details?id=org.traccar.client)
+- *APPLE*:Instala Traccar client via [Apple App Store](https://apps.apple.com/us/app/traccar-client/id843156974)
 
-### 3. Configuration
+### 3. Configuración
 
-- On the phone, make sure location (in settings > privacy) is enabled, AND that the locating method is as high as possible (GPS and Wi-Fi)
-- Open the Traccar app
-- Set the Device Identifier to _your Identification number_ (see the "Registration" section above to get a device ID)
-- Set the address of the server URL: `https://databrew.app`
-- Set the Frequency field to: `60`
-- Set location accuracy to: `high`
-- Do not change the Distance or Angles fields
-- At the top set "Service status" to on/running
+- En el teléfono, asegúrese de que la ubicación (en configuración> privacidad) esté habilitada, Y que el método de localización sea lo más alto posible (GPS y Wi-Fi)
+- Abra la aplicación Traccar
+- Configure el Identificador de dispositivo en _your Identification number_ (consulte la sección "Registro" más arriba para obtener una ID de dispositivo)
+- Establezca la dirección de la URL del servidor: `https://databrew.app`
+- Establezca el campo Frecuencia a: `60`
+- Establezca la precisión de la ubicación en: `high`
+- No cambie los campos Distancia o Ángulos
+- En la parte superior establezca "Estado del servicio" en on/running
 
-### 4. Use
 
-- The Traccar app should be running ("Service status" set to on) at all times during operations
-- The app will automatically initialize upon device reboot
-- If for some reason the app is turned off, please turn it back on
-- We have tested the app on many devices. At the 60 second recording interval, it has only minimal effect on battery life.
-- When the device is offline, GPS coordinates are stored locally; when an internet connection is found, GPS coordinates are sent to the server.
+### 4. Utilizar
+
+- La aplicación Traccar debe estar ejecutándose ("Estado del servicio" activado) en todo momento durante las operaciones
+- La aplicación se iniciará automáticamente al reiniciar el dispositivo
+- Si por alguna razón la aplicación está apagada, vuelva a encenderla
+- Hemos probado la aplicación en muchos dispositivos. En el intervalo de grabación de 60 segundos, solo tiene un efecto mínimo en la duración de la batería.
+- Cuando el dispositivo está fuera de cobertura, las coordenadas GPS se almacenan localmente; Cuando se encuentra una conexión a Internet, las coordenadas GPS se envían al servidor.
