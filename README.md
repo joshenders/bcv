@@ -1,6 +1,6 @@
-# BCV: Busca y captura el virus
+# BCV: Busca y captura el virus (Search and arrest the virus)
 
-_GPS tracking of healthcare workers for automated contact-tracing_
+_A tool for GPS tracking of healthcare workers so as to empower and automated epidemiological contact-tracing_
 
 ## Overview
 
