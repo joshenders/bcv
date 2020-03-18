@@ -4,6 +4,12 @@ library(dplyr)
 library(RMySQL)
 library(DBI)
 
+
+creds <- list(dbname = 'bcvdb',
+              host = '3.130.255.155',
+              user = 'bcvuser',
+              pass = 'bcvpass')
+
 # Connect to database
 con <- DBI::dbConnect(drv = RMySQL::MySQL(),
                          dbname = creds$dbname,

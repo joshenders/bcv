@@ -339,7 +339,27 @@ mysql -h 3.130.255.155 -u traccarremoteuser -p
 ### Set up of shiny app
 
 - A shiny app is deployed for enrolling workers
-- To deploy, go into the shiny server (separate documentation)
+- Once only, `set_up_database.R` must be run
+- To deploy, go into the shiny server (separate documentation) (`shiny` alias) and run:
+```
+# only once
+mkdir Documents
+cd Documents
+git clone https://github.com/databrew/bcv
+# Make sure packages installed
+sudo su - -c "R -e \"install.packages('DBI')\"" ;
+sudo su - -c "R -e \"install.packages('RMySQL')\"" ;
+
+# For redeploys
+cd ~/Documents/bcv
+git pull
+cd /srv/shiny-server
+mkdir bcv
+cp ~/Documents/bcv/shiny/app.R bcv/app.R
+sudo chmod -R 777 bcv
+sudo systemctl restart shiny-server
+
+```
 
 
 ### Data extraction
