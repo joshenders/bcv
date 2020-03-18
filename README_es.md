@@ -7,8 +7,8 @@ _A tool for GPS tracking of healthcare workers so as to empower and automated ep
 
 ## Enlaces rápidos
 
-- Para registrarse como participante: [REGISTRATION LINK](https://datacat.cc/bcv/)
-- Instrucciones para configurar el teléfono después del registro: [PHONE INSTRUCTIONS](guias/phone_documentation_es.md)
+- Para registrarse como participante: [ENLACE DE INSCRIPCIÓN](https://datacat.cc/bcv/)
+- Instrucciones para configurar el teléfono después del registro: [INSTRUCCIONES PARA LA APLICACIÓN MÓVIL](guias/phone_documentation_es.md)
 
 
 ## Visión general
