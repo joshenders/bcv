@@ -399,7 +399,7 @@ select * from tc_positions;
 
 ```
 mysql -h 3.130.255.155 -u bcvuser -p
-<traccarremotepass>
+<bcvpass>
 use bcvdb
 ```
 
