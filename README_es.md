@@ -5,48 +5,52 @@ _A tool for GPS tracking of healthcare workers so as to empower and automated ep
 [THIS PAGE IN ENGLISH](README.md)
 
 
-## Quick-links
+## Enlaces rápidos
 
-- To register as a participant: [REGISTRATION LINK](https://datacat.cc/bcv/)
-- Instructions for setting up phone after registration: [PHONE INSTRUCTIONS](guias/phone_documentation_es.md)
-
-## Overview
-
-Healthcare workers are especially high-risk for COVID-19 infection. By extension, their contacts (including those they live with, those they treat, those from whom they shop, etc.) are also at high-risk of infection. Protecting healthcare workers’ contacts is vital to supporting their work, as well as to preventing large-spread disease transmission from HCWs to society. We will passively track healthcare workers’ locations via smartphone so that when a healthcare worker tests positive, retrospective epidemiological investigation (contact-tracing) can be rapid, accurate, and automated.
+- Para registrarse como participante: [ENLACE DE INSCRIPCIÓN](https://datacat.cc/bcv/)
+- Instrucciones para configurar el teléfono después del registro: [INSTRUCCIONES PARA LA APLICACIÓN MÓVIL](guias/phone_documentation_es.md)
 
 
-- Collecting location data on healthcare workers serves two purposes:
-  1. **To protect the HCW**: If one of yotheirur colleagues becomes ill, we will know if/when the HCW had contact with them (and therefore, if the HCW is at risk and requires screening or confinement)
-  2. **To protect the HCW's contacts**: If you yourself become ill, we will know who you might have infected, and can therefore perform screening.
+## Visión general
+
+Los trabajadores sanitarios tienen un riesgo especialmente alto de infección por COVID-19. Por extensión, sus contactos (incluidos los que viven con ellos, los que tratan, de los que compran, etc.) también tienen un alto riesgo de infección. Proteger los contactos de los trabajadores sanitarios es vital para apoyar su trabajo, así como para prevenir la transmisión de enfermedades de gran envergadura de los trabajadroes sanitarios a la sociedad. Realizaremos un seguimiento pasivo de las ubicaciones de los trabajadores sanitarios a través de un teléfono inteligente para que cuando un trabajador sanitario dé un resultado positivo, la investigación epidemiológica retrospectiva (seguimiento de contactos) pueda ser rápida, precisa y automatizada.
 
 
-## Steps / Protocol
+- La recopilación de datos de ubicación de trabajadores de la salud tiene dos propósitos:
+  1. **Para proteger el personal sanitario**: Si uno de sus colegas se enferma, sabremos si/cuando el TS tuvo contacto con ellos (y por lo tanto, si el TS está en riesgo y requiere detección o confinamiento)
+  2. **Para proteger los contactos de los TS**: Si usted mismo se enferma, sabremos a quién podría haber infectado y, por lo tanto, podemos realizar la detección.
 
-- All healthcare workers of a facility/district are asked to voluntarily install a simple smartphone application.
-- The application sends their GPS location to a secure server every 60 seconds.
-- When a HCW tests positive, the HCW’s ID number is flagged as positive.
-- Once a HCW is flagged as positive, the following 3 at-risk groups are automatically identified and reports are automatically generated:
-  - Geographic risk group: The server automatically generates a report (with maps) outlining the geographical itinerary of the HCW during his/her hypothetically infectious period. This serves to identify/screen people potentially infected by the HCW (ie, neighbors, household members, etc.).
-  - Occupational risk: The server automatically identifies “crossover” between the infected HCW and other HCWs who also have the smartphone app. That is, it identifies those who worked the same shifts, or who were in close proximity despite not formally sharing shifts.
-  - Incidental risk: The server automatically identifies the “stops” in the HCS’s geographical itinerary: ie, gas-stations, grocery stores, visits to a relative, etc. People at the “stop” locations can be screened, since they may have become infected.
 
-## Data protection
+## Pasos / Protocolo
 
-- Participation is voluntary.
-- Participants can easily turn off tracking at any time by simply pressing a button.
-- Data is only used if a HCW tests positive.
-- All data is automatically deleted after 14 days.
-- Reports only available to relevant health authorities.
-- No direct access to server to anyone except server manager.
+- Se solicita a todos los trabajadores de la salud de una ubicación/distrito que instalen voluntariamente una aplicación simple para teléfonos móvil.
+- La aplicación envía su ubicación GPS a un servidor seguro cada 60 segundos.
+- Cuando un TS da positivo, el número de identificación del TS se marca como positivo.
+- Una vez que un TS se marca como positivo, los siguientes 3 grupos en riesgo se identifican automáticamente y se generan informes automáticamente:
+  - Grupo de riesgo geográfico: el servidor genera automáticamente un informe (con mapas) que describe el itinerario geográfico del TS durante su período hipotéticamente infeccioso. Esto sirve para identificar/detectar personas potencialmente infectadas por el TS (es decir, vecinos, miembros del hogar, etc.).
+  - Riesgo laboral: el servidor identifica automáticamente el "cruce" entre el TS infectado y otros TS que también tienen 	la aplicación para teléfonos móviles. Es decir, identifica a aquellos que trabajaron los mismos turnos, o que 	estuvieron muy cerca a pesar de no compartir formalmente los turnos.
+  - Riesgo incidental: el servidor identifica automáticamente las "paradas" en el itinerario geográfico del TS: es decir, estaciones de servicio, supermercados, visitas a un pariente, etc. Las personas en las ubicaciones de "paradas" pueden ser examinadas, ya que pueden haberse infectado.
+
+
+## Protección de Datos
+
+- La participación es voluntaria.
+- Los participantes pueden desactivar fácilmente el seguimiento en cualquier momento simplemente presionando un botón.
+- Los datos solo se usan si un TS da positivo.
+- Todos los datos se eliminan automáticamente después de 14 días.
+- Informes solo disponibles para las autoridades sanitarias pertinentes.
+- No hay acceso directo al servidor para nadie, excepto el administrador del servidor.
+
 
 ## Timeline
 
-- Start: Both the front-end (smart phone application) and back-end (server data management system) already exist and are ready to deploy now.
-- Reports: The three aforementioned reports can be developed in < 5 days.
-- Scale: Having demonstrated feasibility, we will propose large-scale implementation in < 1 week.
+- Inicio: tanto el front-end (aplicación de teléfono) como el back-end (sistema de administración de datos del servidor) ya existen y están listos para implementarse ahora.
+- Informes: los tres informes antes mencionados se pueden desarrollar en <5 días.
+- Escala: habiendo demostrado la viabilidad, propondremos una implementación a gran escala en <1 semana.
 
-## Details
+## Detalles
 
-- Company to manage data, reports generation, security: Databrew LLC
-- Smartphone / server-side application to be used: Traccar
-- Contact: Joe Brew | joe@databrew.cc | +34 666 66 80 86
+- Empresa para gestionar datos, generación de informes, seguridad: Databrew LLC
+- Aplicación de teléfono móvil/servidor que se utilizará: Traccar
+- Contacto: Joe Brew | joe@databrew.cc | +34666 66 80 86
+
