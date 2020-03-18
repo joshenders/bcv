@@ -5,7 +5,7 @@
 ### Registration
 
 - Before you install anything, we need to know who you are and that you are participating.
-- Please go to [REGISTRATION PAGE](datacat.cc/bcv) and fill out the form
+- Please go to [REGISTRATION PAGE](https://datacat.cc/bcv) and fill out the form
 - Please take note of the ID number you are assigned. You will need to put this into your phone (next step).
 
 ### Installation
