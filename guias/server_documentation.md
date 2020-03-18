@@ -163,6 +163,40 @@ sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/databrew.a
 sudo nano /etc/nginx/sites-available/databrew.app
 ```
 - Make it as follows:
+
+```
+# redirect from http to https for databrew.app
+server {
+  listen 80;
+  listen [::]:80;
+   server_name databrew.app www.databrew.app;
+   return 301 https://$server_name$request_uri;
+}
+
+server {
+   listen 443 ssl;
+   server_name databrew.app www.databrew.app;
+   ssl_certificate /etc/letsencrypt/live/databrew.app/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/databrew.app/privkey.pem;
+   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+   ssl_prefer_server_ciphers on;
+   ssl_ciphers AES256+EECDH:AES256+EDH:!aNULL;
+
+
+   # anything that does not match the above location blocks (if there are any)
+   # will get directed to 3838
+      location / {
+          proxy_pass http://127.0.0.1:8082/;
+          proxy_redirect http://127.0.0.1:8082/ https://$host/;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_read_timeout 20d;
+      }
+   }
+```
+
+
+- OLD CONFIG
 ```
 server_name databrew.app;
 

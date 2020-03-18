@@ -12,11 +12,11 @@ creds <- list(dbname = 'bcvdb',
 
 # Connect to database
 con <- DBI::dbConnect(drv = RMySQL::MySQL(),
-                         dbname = creds$dbname,
-                         host = creds$host,
-                         user = creds$user,
-                         pass = creds$pass,
-                         port = 3306)
+                      dbname = creds$dbname,
+                      host = creds$host,
+                      user = creds$user,
+                      pass = creds$pass,
+                      port = 3306)
 
 
 # Define function for registering workers
@@ -32,7 +32,7 @@ register <- function(nombre,
                lugar)
   # Get new number
   old <- dbGetQuery(conn = con,
-                             "select MAX(id) FROM users;")
+                    "select MAX(id) FROM users;")
   new <- as.numeric(old) +1
   df$id <- new
   
@@ -41,51 +41,83 @@ register <- function(nombre,
                  name = 'users',
                  value = df,
                  append = TRUE)
-   if(try_add){
-     return(new)
-   }
+  if(try_add){
+    return(new)
+  }
 }
 
-ui <- f7Page(
+ui = f7Page(
+
   init = f7Init(
     skin = 'ios', #  c("ios", "md", "auto", "aurora"),
     theme = 'light', #c("dark", "light"),
     filled = TRUE
   ),
   title = "BCV: Inscripción",
-  f7SingleLayout(
+  
+  
+  f7TabLayout(
     navbar = f7Navbar(
-      title = "BCV: Inscripción",
-      hairline = TRUE,
-      shadow = TRUE
+      title = "Tabs",
+      hairline = FALSE,
+      shadow = TRUE,
+      left_panel = FALSE,
+      right_panel = FALSE
     ),
-    toolbar = f7Toolbar(
-      position = "bottom",
-      f7Link(label = "Databrew", src = "https://databrew.cc", external = TRUE),
-      f7Link(label = "BCV", src = "https://github.com/databrew/bcv", external = TRUE)
-    ),
-    # main content
-    f7Shadow(
-      intensity = 10,
-      hover = TRUE,
-      f7Card(
-        shinyMobile::f7Text('nombre', 'Nombre'),
-        shinyMobile::f7Text('apellido', 'Apellido'),
-        shinyMobile::f7Text('tel', 'Teléfono'),
-        shinyMobile::f7Text('email', 'E-mail'),
-        shinyMobile::f7Text('lugar', 'Lugar de trabajo'),
-        br(),
-        column(12,
-               align = 'center',
-               actionButton('register', 'HAZ CLICK AQUÍ PARA DAR DE ALTA Y RECIBIR UN NÚMERO DE IDENTIFICACIÓN'),
-               h1(textOutput('number_text')),
-               h2(textOutput('done_text')),
-               f7Link(label = "INSTRUCCIONES PARA INSTALAR LA APLICACIÓN EN EL MÓVIL", src = "https://github.com/databrew/bcv/blob/master/guias/phone_documentation_es.md", external = TRUE)
-               )
-        
+    f7Tabs(
+      animated = TRUE,
+      f7Tab(
+        tabName = "REGISTRATION | INSCRIPCIÓN",
+        icon = f7Icon("email"),
+        active = TRUE,
+        f7Shadow(
+          intensity = 10,
+          hover = TRUE,
+          f7Card(
+            
+            shinyMobile::f7Text('nombre', 'Nombre'),
+            shinyMobile::f7Text('apellido', 'Apellido'),
+            shinyMobile::f7Text('tel', 'Teléfono'),
+            shinyMobile::f7Text('email', 'E-mail'),
+            shinyMobile::f7Text('lugar', 'Lugar de trabajo'),
+            br(),
+            column(12,
+                   align = 'center',
+                   actionButton('register', 'HAZ CLICK AQUÍ PARA DAR DE ALTA Y RECIBIR UN NÚMERO DE IDENTIFICACIÓN'),
+                   h1(textOutput('number_text')),
+                   h2(textOutput('done_text')),
+                   f7Link(label = "INSTRUCCIONES PARA INSTALAR LA APLICACIÓN EN EL MÓVIL", src = "https://github.com/databrew/bcv/blob/master/guias/phone_documentation_es.md", external = TRUE)
+            ),
+            
+            title = "Registration | Inscripción",
+            footer = tagList(
+              f7Button(color = "blue", label = "Databrew LLC", src = "https://www.databrew.cc"),
+              f7Button(color = 'blue', label = 'BCV', src = 'https://github.com/databrew/bcv')
+            )
+          )
+        )
+      ),
+      f7Tab(
+        tabName = "REPORT CASE | INFORMAR CASO",
+        icon = f7Icon("cloud_upload"),
+        active = FALSE,
+        f7Shadow(
+          intensity = 10,
+          hover = TRUE,
+          f7Card(
+            
+            uiOutput('report_ui'),
+            title = "Report case | Informar de un caso",
+            footer = tagList(
+              f7Button(color = "blue", label = "Databrew LLC", src = "https://www.databrew.cc"),
+              f7Button(color = 'blue', label = 'BCV', src = 'https://github.com/databrew/bcv')
+            )
+          )
+        )
       )
     )
   )
+  
 )
 
 server <- function(input, output, session) {
@@ -145,7 +177,7 @@ server <- function(input, output, session) {
     return(out)
     
   })
-
+  
   output$number_text <- renderText({
     tn <- the_number()
     if(is.na(tn)){
@@ -156,6 +188,51 @@ server <- function(input, output, session) {
     }
   })
   
+  logged_in <- reactiveVal(value = FALSE)
+  observeEvent(input$log_in,{
+    user <- input$user
+    pass <- input$pass
+    ok <- FALSE
+    if(user == 'admin' &
+       pass == 'admin'){
+      ok <- TRUE
+    }
+    if(ok){
+      logged_in(TRUE)
+    }
+  })
+  
+  output$report_ui <- renderUI({
+    
+    li <- logged_in()
+    if(li){
+      fluidPage(
+        f7Text('case_id', 'BCV ID of case'),
+        f7Text('case_name', 'Name of case'),
+        dateInput('case_date_symptoms', 'Date of symptoms onset'),
+        dateInput('case_date_dx', 'Date of diagnosis'),
+        actionButton('submit_case', 'Report case | Informar del caso'),
+        textOutput('submit_case_text')
+      )
+    } else {
+      fluidPage(
+        f7Text('user', 'Username'),
+        f7Text('pass', 'Password'),
+        f7Button('log_in', 'Log in', 
+                 rounded = TRUE)
+      )
+    }
+  })
+  
+  submitted_text <- reactiveVal(value = '')
+  observeEvent(input$submit_case, {
+    submitted_text('Información enviada con éxito.\nCase info successfully submitted.')
+  })
+  
+  output$submit_case_text <- renderText({
+    out <- submitted_text()
+    out
+  })
   
 }
 
