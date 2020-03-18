@@ -2,6 +2,11 @@
 
 _A tool for GPS tracking of healthcare workers so as to empower and automated epidemiological contact-tracing_
 
+## Quick-links
+
+- To register as a participant: [REGISTRATION INSTRUCTIONS](https://datacat.cc/bcv/)
+- Instructions for setting up phone after regisration: [PHONE INSTRUCTIONS](guias/phone_documentation.md)
+
 ## Overview
 
 Healthcare workers are especially high-risk for COVID-19 infection. By extension, their contacts (including those they live with, those they treat, those from whom they shop, etc.) are also at high-risk of infection. Protecting healthcare workers’ contacts is vital to supporting their work, as well as to preventing largespread disease transmission from HCWs to society. We will passively track healthcare workers’ locations via smartphone so that when a healthcare worker tests positive, retrospective epidemiological investigation (contact-tracing) can be rapid, accurate, and automated.

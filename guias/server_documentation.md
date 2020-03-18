@@ -351,13 +351,14 @@ sudo su - -c "R -e \"install.packages('DBI')\"" ;
 sudo su - -c "R -e \"install.packages('RMySQL')\"" ;
 
 # For redeploys
-cd ~/Documents/bcv
-git pull
-cd /srv/shiny-server
-mkdir bcv
-cp ~/Documents/bcv/shiny/app.R bcv/app.R
-sudo chmod -R 777 bcv
-sudo systemctl restart shiny-server
+cd ~/Documents/bcv;
+git pull;
+cd /srv/shiny-server;
+rm -r bcv;
+mkdir bcv;
+cp ~/Documents/bcv/shiny/app.R bcv/app.R;
+sudo chmod -R 777 bcv;
+sudo systemctl restart shiny-server;
 
 ```
 
