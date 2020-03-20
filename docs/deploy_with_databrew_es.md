@@ -1,23 +1,24 @@
 # Deploy BCV with databrew
 
-## Caveat
+## Consideración
 
-- **Important**: If you are reading this guide, it's because you are already in contact with [Databrew LLC](info@databrew.cc) and we are working together on deploying a system for tracking the locations of HCWs at your facility.
-- If this is not the case, you should either (a) [contact us](info@databrew.cc) to solicit assistance or (b) refer to the [IT guide](it_guide.md) for instructions on how to set up this system on your own.
-
-# Setting up the system
+- **Importante**: Si está leyendo esta guía, es porque ya está en contacto con [Databrew LLC](info@databrew.cc) y estamos trabajando juntos en la implementación de un sistema para rastrear las ubicaciones de los TS en sus instalaciones.
+- Si este no es el caso, debe (a) [contactarnos] (info@databrew.cc) para solicitar asistencia o (b) consultar la [guía de IT] (it_guide.md) para obtener instrucciones sobre cómo configurar este sistema por su cuenta.
 
 
-### 1. Register your participation
+# Configurando el sistema
 
-- Before you install anything, we need to know who you are and that you are participating.
-- Every participating HCW should go to the [REGISTRATION PAGE](https://datacat.cc/bcv) and fill out the form
-- The form will generate an ID number for you. **Important**: take note of this number. You will need it in the next step.
+
+### 1. Registra tu participación
+
+- Antes de instalar cualquier cosa, necesitamos saber quién es usted y si está participando.
+- Cada TS participante debe ir a la [PÁGINA DE REGISTRO] (https://datacat.cc/bcv) y completar el formulario
+- El formulario generará un número de identificación para usted. **Importante**: tome nota de este número. Lo necesitará en el siguiente paso.
 
 ### 2. Instalación
 
 - *ANDROID*: Instala Traccar client via [Google Play Store](https://play.google.com/store/apps/details?id=org.traccar.client)
-- *APPLE*:Instala Traccar client via [Apple App Store](https://apps.apple.com/us/app/traccar-client/id843156974)
+- *APPLE*: Instala Traccar client via [Apple App Store](https://apps.apple.com/us/app/traccar-client/id843156974)
 
 ### 3. Configuración
 
@@ -26,7 +27,6 @@
 - Abra la aplicación Traccar
 
 <img src="img/a.png" height="400">
-
 
 
 - Configure el Identificador de dispositivo en _your Identification number_ (consulte la sección "Registro" más arriba para obtener una ID de dispositivo)
@@ -48,7 +48,6 @@
 <img src="img/e.png" height="400">
 
 
-
 - No cambie los campos Distancia o Ángulos
 
 
@@ -68,10 +67,10 @@
 - Hemos probado la aplicación en muchos dispositivos. En el intervalo de grabación de 60 segundos, solo tiene un efecto mínimo en la duración de la batería.
 - Cuando el dispositivo está fuera de cobertura, las coordenadas GPS se almacenan localmente; Cuando se encuentra una conexión a Internet, las coordenadas GPS se envían al servidor.
 
-# Reporting a case
+# Informar sobre un caso
 
-- Go to https://datacat.cc/bcv
-- In the bottom right, click "Report case"
-- After a few minutes, you will receive an email report
+- Vaya a https://datacat.cc/bcv
+- En la parte inferior derecha, haz clic en "Informar caso"
+- Después de unos minutos, recibirá un informe por correo electrónico.
 
 <img src="img/e.png" height="400">
