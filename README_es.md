@@ -1,18 +1,18 @@
-# BCV: Open-source tools for tracking healthcare workers' locations during the COVID-19 pandemic
+# BCV: herramientas de código abierto para rastrear las ubicaciones de los trabajadores de la salud durante la pandemia de COVID-19
 
-_Busca y Captura para el Virus (Search and arrest the virus): A tool for GPS tracking of healthcare workers so as to empower and automate epidemiological contact-tracing_
+_Busca y Captura para el Virus (Buscar y detener el virus): una herramienta para el seguimiento por GPS de los trabajadores Sanitarios a fin de potenciar y automatizar el seguimiento epidemiológico de contactos_
 
-## What is BCV?
+## ¿Qué es BCV?
 
-BCV stands for "busca y captura el virus" (search and arrest the virus). It's a framework / suite of open-source tools for tracking the locations of healthcare workers (HCWs) so as to enable automated contact-tracing when a HCW tests positive.
+BCV significa "busca y captura el virus" (buscar y detener el virus). Es un marco/conjunto de herramientas de código abierto para rastrear las ubicaciones de los trabajadores sanitarios (TS) para permitir el seguimiento automático de contactos cuando un TS da positivo.
 
-## Who is BCV for?
+## ¿Para quién es BCV?
 
-Public health agencies, hospitals, ministries, etc. Anyone managing workers who are at high-risk of infection.
+Agencias de salud pública, hospitales, ministerios, etc. Cualquier persona que maneje trabajadores con alto riesgo de infección.
 
-## Why track HCWs?
+## ¿Por qué rastrear a los HCW?
 
-HCWs are at high risk for getting infected, and therefore at high risk for infecting their community. Because of their movement between (a) epicenters of contagion (hospitals, etc.) and (b) the community, they present a special risk to the community at large (even in a context of lock-down / confinement / shelter-in-place).
+Los trabajadores sanitarios tienen un alto riesgo de infectarse y, por lo tanto, un alto riesgo de infectar a su comunidad. Debido a su movimiento entre (a) epicentros de contagio (hospitales, etc.) y (b) la comunidad, presentan un riesgo especial para la comunidad en general (incluso en un contexto de encierro / confinamiento / refugio) sitio).
 
 ## How does this work?
 
@@ -20,3 +20,16 @@ If you want to set up the location-tracking system, you either need to:
 
 - Get your IT team to follow [THIS GUIDE](docs/it_guide.md) to deploy your own system
 - Request Databrew to deploy a system for you by [EMAILING US](info@databrew.cc)
+
+
+
+
+
+## 
+
+## ¿Como funciona esto?
+
+Si desea configurar el sistema de seguimiento de ubicación, debe:
+
+- Haga que su equipo de TI siga [ESTA GUÍA] (docs / it_guide.md) para implementar su propio sistema
+- Solicite a Databrew que implemente un sistema para usted por [EMAILING US] (info@databrew.cc)
