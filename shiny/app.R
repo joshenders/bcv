@@ -103,7 +103,7 @@ ui = f7Page(
                    actionButton('register', 'HAZ CLICK AQUÍ PARA DAR DE ALTA Y RECIBIR UN NÚMERO DE IDENTIFICACIÓN'),
                    h1(textOutput('number_text')),
                    h2(textOutput('done_text')),
-                   f7Link(label = "INSTRUCCIONES PARA INSTALAR LA APLICACIÓN EN EL MÓVIL", src = "https://github.com/databrew/bcv/blob/master/guias/phone_documentation_es.md", external = TRUE)
+                   f7Link(label = "INSTRUCCIONES PARA INSTALAR LA APLICACIÓN EN EL MÓVIL", src = "https://github.com/databrew/bcv/blob/master/docs/phone_documentation_es.md", external = TRUE)
             ),
             
             title = "Registration | Inscripción",
