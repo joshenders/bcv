@@ -2,9 +2,8 @@
 
 _A tool for GPS tracking of healthcare workers so as to empower and automated epidemiological contact-tracing_
 
-
-
 [ESTA PÁGINA EN ESPAÑOL](README_es.md)
+
 
 ## Quick-links
 

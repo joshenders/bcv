@@ -53,4 +53,3 @@ Los trabajadores sanitarios tienen un riesgo especialmente alto de infección po
 - Empresa para gestionar datos, generación de informes, seguridad: Databrew LLC
 - Aplicación de teléfono móvil/servidor que se utilizará: Traccar
 - Contacto: Joe Brew | joe@databrew.cc | +34666 66 80 86
-
