@@ -70,6 +70,7 @@ Este proceso tarda unos 5 minutos. Cada participante tiene que hacerlo.
 
 # Informar sobre un caso
 
+- Solo puede informar sobre un caso un "administrador". Envia un correo a joe@databrew.cc para el usuario/contraseña.
 - Vaya a https://datacat.cc/bcv
 - En la parte inferior derecha, haz clic en "Informar caso"
 - Después de unos minutos, recibirá un informe por correo electrónico.
