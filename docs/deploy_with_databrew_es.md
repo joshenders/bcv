@@ -6,13 +6,14 @@
 - Si este no es el caso, debe (a) [contactarnos] (info@databrew.cc) para solicitar asistencia o (b) consultar la [guía de IT] (it_guide.md) para obtener instrucciones sobre cómo configurar este sistema por su cuenta.
 
 
-# Configurando el sistema
+# Instrucciones
 
+Este proceso tarda unos 5 minutos. Cada participante tiene que hacerlo.
 
-### 1. Registra tu participación
+### 1. Registra la participación de cada trabajador
 
-- Antes de instalar cualquier cosa, necesitamos saber quién es usted y si está participando.
-- Cada TS participante debe ir a la [PÁGINA DE REGISTRO] (https://datacat.cc/bcv) y completar el formulario
+- Antes de instalar cualquier cosa en los teléfonos, necesitamos saber quién es usted y si está participando.
+- Cada TS participante debe ir a la [PÁGINA DE REGISTRO](https://datacat.cc/bcv) y completar el formulario
 - El formulario generará un número de identificación para usted. **Importante**: tome nota de este número. Lo necesitará en el siguiente paso.
 
 ### 2. Instalación
@@ -73,4 +74,4 @@
 - En la parte inferior derecha, haz clic en "Informar caso"
 - Después de unos minutos, recibirá un informe por correo electrónico.
 
-<img src="img/e.png" height="400">
+<img src="img/g.png" height="400">

@@ -5,7 +5,7 @@
 - **Important**: If you are reading this guide, it's because you are already in contact with [Databrew LLC](info@databrew.cc) and we are working together on deploying a system for tracking the locations of HCWs at your facility.
 - If this is not the case, you should either (a) [contact us](info@databrew.cc) to solicit assistance or (b) refer to the [IT guide](it_guide.md) for instructions on how to set up this system on your own.
 
-# Set-up 
+# Set-up
 
 
 ### 1. Register your participation
@@ -71,4 +71,4 @@
 - In the bottom right, click "Report case"
 - After a few minutes, you will receive an email report
 
-<img src="img/e.png" height="400">
+<img src="img/g.png" height="400">
