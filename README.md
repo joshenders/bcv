@@ -18,5 +18,5 @@ HCWs are at high risk for getting infected, and therefore at high risk for infec
 
 If you want to set up the location-tracking system, you either need to:
 
-- Get your IT team to follow [this guide](docs/it_guide.md) to deploy your own system
+- Get your IT team to follow [THIS GUIDE](docs/it_guide.md) to deploy your own system
 - Request Databrew to deploy a system for you by [EMAILING US](info@databrew.cc)
