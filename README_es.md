@@ -25,11 +25,11 @@ If you want to set up the location-tracking system, you either need to:
 
 
 
-## 
+##
 
 ## ¿Como funciona esto?
 
 Si desea configurar el sistema de seguimiento de ubicación, debe:
 
-- Haga que su equipo de TI siga [ESTA GUÍA] (docs / it_guide.md) para implementar su propio sistema
-- Solicite a Databrew que implemente un sistema para usted por [EMAILING US] (info@databrew.cc)
+- Haga que su equipo de TI siga [ESTA GUÍA](docs / it_guide.md) para implementar su propio sistema
+- Solicite a Databrew que implemente un sistema para usted por [EMAILING US](info@databrew.cc)

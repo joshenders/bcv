@@ -3,7 +3,7 @@
 ## Consideración
 
 - **Importante**: Si está leyendo esta guía, es porque ya está en contacto con [Databrew LLC](info@databrew.cc) y estamos trabajando juntos en la implementación de un sistema para rastrear las ubicaciones de los TS en sus instalaciones.
-- Si este no es el caso, debe (a) [contactarnos] (info@databrew.cc) para solicitar asistencia o (b) consultar la [guía de IT] (it_guide.md) para obtener instrucciones sobre cómo configurar este sistema por su cuenta.
+- Si este no es el caso, debe (a) [contactarnos](info@databrew.cc) para solicitar asistencia o (b) consultar la [guía de IT](it_guide.md) para obtener instrucciones sobre cómo configurar este sistema por su cuenta.
 
 
 # Instrucciones
