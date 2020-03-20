@@ -709,7 +709,7 @@ sudo chmod g+w .
 sudo chmod g+s .
 ```
 
-## Set up the shiny applicatio
+## Set up the shiny application
 
 - On the shiny server, run:
 ```
@@ -738,8 +738,56 @@ sudo systemctl restart shiny-server;
 
 # Syncing between the shiny app and the traccar server
 
-- This line of work is currenly in progress. Anticipated to be finished on Friday March 20th
+- To sync between the shiny server and the traccar server, you can run something like the following in R:
+```
+library(rtraccar) # devtools::install_github('databrew/rtraccar')
+library(yaml)
+library(dplyr)
 
+# Read in credentials
+credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
+# You should have this file set up with the user/password of your devices, etc.
+
+# Get users data already registered on the traccar server
+in_shiny <- get_traccar_sql_data(dbname = credentials$dbname,
+                              host = credentials$host,
+                              user = credentials$user,
+                              pass = credentials$pass,
+                              port = credentials$port)
+
+# Get users who have registered on the shiny app
+in_traccar <- get_traccar_data(url = credentials$traccar_url,
+                                     user = credentials$traccar_user,
+                                     pass = credentials$traccar_pass)
+
+# Define a subset of those that are already regiestered in the shiny
+# app, but not yet registered on the traccar server
+need_to_register <- in_shiny %>%
+  filter(!as.numeric(as.character(id)) %in% as.numeric(as.character(in_traccar$uniqueId)))
+
+# Loop through each person and register on traccar
+if(nrow(need_to_register)){
+  go <- TRUE
+} else {
+  go <- FALSE
+}
+if(go){
+  for(i in 1:nrow(need_to_register)){
+    this_row <- need_to_register[i,]
+    this_name <- paste0(this_row$nombre, ' ', this_row$apellido)
+    this_id <- this_row$id
+    message('Trying to add worker ', i, ':')
+    print(need_to_register)
+    post_traccar_data(user = credentials$traccar_user,
+                      pass = credentials$traccar_pass,
+                      name = this_name,
+                      unique_id = this_id,
+                      url = credentials$traccar_url)
+  }
+
+}
+
+```
 
 ### Data extraction
 
@@ -767,7 +815,7 @@ mysql -h 3.130.255.155 -u bcvuser -p
 use bcvdb
 ```
 
-- Additionally, we are actively developing tools for interfacing with the data at https://github.com/databrew/rtraccar
+
 
 ### Troubleshooting and logs
 - See logs at `/opt/traccar/logs/tracker-server.log`
