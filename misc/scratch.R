@@ -10,7 +10,6 @@
 # traccar_user
 # traccar_pass
 
-
 library(rtraccar) # devtools::install_github('databrew/rtraccar')
 library(yaml)
 library(dplyr)
@@ -19,7 +18,7 @@ library(dplyr)
 credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
 
 # Get users data already registered on the traccar server
-in_shiny <- get_traccar_sql_data(dbname = credentials$dbname, 
+in_shiny <- get_registered_workers(dbname = credentials$dbname, 
                               host = credentials$host, 
                               user = credentials$user, 
                               pass = credentials$pass, 

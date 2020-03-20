@@ -749,7 +749,7 @@ credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
 # You should have this file set up with the user/password of your devices, etc.
 
 # Get users data already registered on the traccar server
-in_shiny <- get_traccar_sql_data(dbname = credentials$dbname,
+in_shiny <- get_registered_workers(dbname = credentials$dbname,
                               host = credentials$host,
                               user = credentials$user,
                               pass = credentials$pass,
