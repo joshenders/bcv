@@ -69,20 +69,21 @@ get_positions_from_device_id <- function(url,
 #' @import httr
 #' @import tidyverse
 #' @import yaml
+#' @import readr
 get_positions_from_unique_id <- function(url, 
                                          user, 
                                          pass, 
                                          unique_id){
   
   # first fetch device_id 
-  device_id <- get_device_id_from_unique_id(url = credentials$traccar_url,
-                               user = credentials$traccar_user
-                               pass = credentials$pass,
-                               unique_id =unique_id)
+  device_id <- get_device_id_from_unique_id(url = url,
+                               user = user,
+                               pass = pass,
+                               unique_id = unique_id)
   # fetch positions
-  out <- get_positions_from_device_id(url = credentials$traccar_url,
-                                      user = credentials$traccar_user
-                                      pass = credentials$pass,
+  out <- get_positions_from_device_id(url = url,
+                                      user = user,
+                                      pass = pass,
                                       device_id =device_id)
   return(out)
   
