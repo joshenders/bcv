@@ -26,7 +26,7 @@ These are the components of the BCV suite:
 #### Buy a domain
 
 - Go to domains.google.com and buy a domain.
-- For the purposes of this guide, the domain being used is `www.databrew.app`
+- For the purposes of this guide, the domain being used is `www.yourdomain.cc`
 
 #### Spin up an EC2 instance on AWS
 
@@ -42,7 +42,7 @@ These are the components of the BCV suite:
   - Type: All traffic
   - Source: Anywhere
 - Launch
-- Note, for this guide we'll use a local key called `odkkey.pem`
+- Note, for this guide we'll use a local key called `localkey.pem`
 
 
 #### Allocate a persistent IP
@@ -56,14 +56,14 @@ These are the components of the BCV suite:
   - In the allocation menu, click "Associate address"
   - Select the instance you just created. Also select the corresponding "Private IP"
   - Click "Associate"
-- Note, this guide is written with the below elastic id. You'll need to replace this with your own when necessary.
+- Note, this guide is written with the below elastic id as an example. You'll need to replace this with your own when necessary.
 
 ```
-3.130.255.155
+1.234.567.890
 ```
 
 - Go to instances menu
-- Name the newly spun-up server "databrew.app (traccar)"
+- Name the newly spun-up server "yourdomain.cc (traccar)"
 
 
 #### Setting up the domain
@@ -72,8 +72,8 @@ These are the components of the BCV suite:
 - Click on "DNS" on the left
 - Go to "Custom resource records"
 - You're going to create two records:
-  1. Name: @; Type: A; TTL 1h; Data: 3.130.255.155
-  2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-3-130-255-155.us-east-2.compute.amazonaws.com.us-east-2.compute.amazonaws.com.
+  1. Name: @; Type: A; TTL 1h; Data: 1.234.567.890
+  2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-1-234-567-890.us-east-2.compute.amazonaws.com.us-east-2.compute.amazonaws.com.
 - Note, you'll need to replace the above DNS/IP for your specific site.
 
 
@@ -84,7 +84,7 @@ These are the components of the BCV suite:
 - It will be something very similar to the following:
 
 ```
-ssh -i ~/.ssh/odkkey.pem ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com
+ssh -i ~/.ssh/localkey.pem ubuntu@ec2-1-234-567-890.us-east-2.compute.amazonaws.com
 ```
 
 #### Install / configure dependencies
@@ -107,7 +107,7 @@ sudo apt install mysql-server
 
 - Java is already installed, but you need to set the `JAVA_HOME` environment variable. To do so:
 - `sudo nano /etc/environment`
-- Add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
+- Add a line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
 - Run `source /etc/environment`
 
 #### Installing Traccar
@@ -130,13 +130,13 @@ sudo ./traccar.run
 ```
 sudo systemctl start traccar.service
 ```
-- Open web interface by navigating to http://localhost:8082/ (on local machine) or databrew.app (if you have already configured the below) or databrew.app:8082
+- Open web interface by navigating to http://localhost:8082/ (on local machine) or yourdomain.cc (if you have already configured the below) or yourdomain.cc:8082
 - Log in as `admin` / `admin`
 
 
 ### Setting up https
 
-Please pay special attention to the use of DNS, IP addresses, and emails in this section. You'll need to change for your specific system.
+Please pay special attention to the use of DNS, IP addresses, and emails in this section. You'll need to change them for your specific system.
 
 ```
 sudo apt install nginx
@@ -146,32 +146,32 @@ sudo add-apt-repository universe
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install certbot python-certbot-nginx
-sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d databrew.app
+sudo certbot run --nginx --non-interactive --agree-tos -m <YOUR EMAIL> --redirect -d yourdomain.cc
 ```
 
 #### Deal with ports, nginx, etc.
 
 - Run the below:
 ```
-sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/databrew.app
-sudo nano /etc/nginx/sites-available/databrew.app
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/yourdomain.cc
+sudo nano /etc/nginx/sites-available/yourdomain.cc
 ```
 - Make it as follows:
 
 ```
-# redirect from http to https for databrew.app
+# redirect from http to https for yourdomain.cc
 server {
   listen 80;
   listen [::]:80;
-   server_name databrew.app www.databrew.app;
+   server_name yourdomain.cc www.yourdomain.cc;
    return 301 https://$server_name$request_uri;
 }
 
 server {
    listen 443 ssl;
-   server_name databrew.app www.databrew.app;
-   ssl_certificate /etc/letsencrypt/live/databrew.app/fullchain.pem;
-   ssl_certificate_key /etc/letsencrypt/live/databrew.app/privkey.pem;
+   server_name yourdomain.cc www.yourdomain.cc;;
+   ssl_certificate /etc/letsencrypt/live/yourdomain.cc/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/yourdomain.cc/privkey.pem;
    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
    ssl_prefer_server_ciphers on;
    ssl_ciphers AES256+EECDH:AES256+EDH:!aNULL;
@@ -191,7 +191,7 @@ server {
 
 - Make a symlink as per below:
 ```
-sudo ln -s /etc/nginx/sites-available/databrew.app /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/yourdomain.cc /etc/nginx/sites-enabled/
 ```
 - Edit a file: `sudo nano /etc/nginx/nginx.conf` and remove the `#` before `server_names_hash_bucket_size 64;`
 - Remove the default nginx file: `sudo rm /etc/nginx/sites-enabled/default`
@@ -234,7 +234,7 @@ FLUSH PRIVILEGES;
 ctrl + d
 mysql -u bcvuser -p
 <enter password>
-CREATE DATABASE bcvdb;
+CREATE DATABASE yourdb;
 ```
 
 #### Configure Traccar for MySQL
@@ -255,12 +255,12 @@ Replace the below lines:
 With:
 ```
 <entry key='database.driver'>com.mysql.jdbc.Driver</entry>
-<entry key='database.url'>jdbc:mysql://3.130.255.155:3306/traccardb?serverTimezone=UTC&amp;useSSL=false&amp;allowMultiQueries=true&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;sessionVariables=sql_mode=''</entry>
+<entry key='database.url'>jdbc:mysql://1.234.567.890:3306/traccardb?serverTimezone=UTC&amp;useSSL=false&amp;allowMultiQueries=true&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;sessionVariables=sql_mode=''</entry>
 <entry key='database.user'>traccaruser</entry>
 <entry key='database.password'>traccarpass</entry>
 ```
 
-- Note in the above that the `3.130.255.155` is the server IP.
+- Note in the above that the `1.234.567.890` is the server IP.
 
 - Also, add some filtering to ensure that we don't capture too much jumpiness:
 ```
@@ -323,7 +323,7 @@ bind-address            = 127.0.0.1
 ```
 sudo systemctl restart mysql
 ```
-- Create remote user and grant privileges (again, change user/pass as appropriate for your system)
+- Create remote user and grant privileges (again, change username/password as appropriate for your system)
 ```
 sudo mysql
 CREATE USER 'traccarremoteuser'@'%' IDENTIFIED BY 'traccarremotepass';
@@ -358,7 +358,7 @@ sudo systemctl start traccar
 ```
 - Test the remote connection (from another box):
 ```
-mysql -h 3.130.255.155 -u traccarremoteuser -p
+mysql -h 1.234.567.890 -u traccarremoteuser -p
 <traccarremotepass>
 ```
 
@@ -382,14 +382,14 @@ mysql -h 3.130.255.155 -u traccarremoteuser -p
 - Storage: 100gb
 - Tags: none
 - Security group: vpc-aggregate group
-- Associate the purchased datacat.cc domain with the IP (elastic IP)
+- Associate the purchased domain with the IP (elastic IP)
 
 ## Set up an alias
 
 - Add the following to the end of `~/.bashrc`
 
 ```
-alias shiny='ssh -i "/home/joebrew/.ssh/odkkey.pem" ubuntu@datacat.cc'
+alias shiny='ssh -i "/home/yourfoldername/.ssh/localkey.pem" <YOUR EMAIL>'
 ```
 - SSH into the server: `shiny`
 
@@ -464,8 +464,8 @@ sudo add-apt-repository universe
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install certbot python-certbot-nginx
-sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d datacat.cc
-sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d datacat.cc
+sudo certbot run --nginx --non-interactive --agree-tos -m <YOUR EMAIL> --redirect -d yourdomain.cc
+sudo certbot run --nginx --non-interactive --agree-tos -m <YOUR EMAIL> --redirect -d yourdomain.cc
 ```
 
 ### Set up proxy, certificate, etc.
@@ -490,25 +490,25 @@ http {
 Now create a new block
 
 ```
-sudo nano /etc/nginx/sites-available/datacat.cc
+sudo nano /etc/nginx/sites-available/yourdomain.cc
 ```
 
-In /etc/nginx/sites-available/datacat.cc, add the following:
+In /etc/nginx/sites-available/yourdomain.cc, add the following:
 
 ```
-# redirect from http to https for datacat.cc
+# redirect from http to https for yourdomain.cc
 server {
   listen 80;
   listen [::]:80;
-   server_name datacat.cc www.datacat.cc;
+   server_name yourdomain.cc www.yourdomain.cc;
    return 301 https://$server_name$request_uri;
 }
 
 server {
    listen 443 ssl;
-   server_name datacat.cc www.datacat.cc;
-   ssl_certificate /etc/letsencrypt/live/datacat.cc/fullchain.pem;
-   ssl_certificate_key /etc/letsencrypt/live/datacat.cc/privkey.pem;
+   server_name yourdomain.cc www.yourdomain.cc;
+   ssl_certificate /etc/letsencrypt/live/yourdomain.cc/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/yourdomain.cc/privkey.pem;
    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
    ssl_prefer_server_ciphers on;
    ssl_ciphers AES256+EECDH:AES256+EDH:!aNULL;
@@ -530,7 +530,7 @@ server {
 #### Enable the new block by creating a symlink
 
 ```
-sudo ln -s /etc/nginx/sites-available/datacat.cc /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/yourdomain.cc /etc/nginx/sites-enabled/
 ```
 
 Disable the default block since our server now handles all incoming traffic
@@ -576,7 +576,7 @@ rm texlive-local.deb
 sudo su - -c "R -e \"install.packages('rmarkdown', repos='http://cran.rstudio.com/')\""
 ```
 - Check that it worked at
-https://datacat.cc/sample-apps/rmd/
+https://yourdomain.cc/sample-apps/rmd/
 
 - Intall some additional software:
 ```
@@ -795,7 +795,7 @@ if(go){
 
 - Get a list of devices:
 ```
-https://databrew.app/api/devices
+https://yourdomain.cc/api/devices
 ```
 etc.
 
@@ -810,7 +810,7 @@ select * from tc_positions;
 - Remotely:
 
 ```
-mysql -h 3.130.255.155 -u bcvuser -p
+mysql -h 1.234.567.890 -u bcvuser -p
 <bcvpass>
 use bcvdb
 ```
