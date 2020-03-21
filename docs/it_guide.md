@@ -131,7 +131,7 @@ sudo ./traccar.run
 sudo systemctl start traccar.service
 ```
 - Open web interface by navigating to http://localhost:8082/ (on local machine) or yourdomain.cc (if you have already configured the below) or yourdomain.cc:8082
-- Log in as `admin` / `admin`
+- Log in as `<username>` / `<password>` (initially admin, to be resest)
 
 
 ### Setting up https
@@ -213,11 +213,11 @@ sudo systemctl start traccar.service
 
 ```
 sudo mysql
-CREATE USER 'traccaruser'@'localhost' IDENTIFIED BY 'traccarpass';
-GRANT ALL PRIVILEGES ON * . * TO 'traccaruser'@'localhost';
+CREATE USER '<traccaruser>'@'localhost' IDENTIFIED BY '<traccarpass>';
+GRANT ALL PRIVILEGES ON * . * TO '<traccaruser>'@'localhost';
 FLUSH PRIVILEGES;
 ctrl + d
-mysql -u traccaruser -p
+mysql -u <traccaruser> -p
 <enter password>
 CREATE DATABASE traccardb;
 ```
@@ -228,11 +228,11 @@ CREATE DATABASE traccardb;
 
 ```
 sudo mysql
-CREATE USER 'bcvuser'@'localhost' IDENTIFIED BY 'bcvpass';
-GRANT ALL PRIVILEGES ON * . * TO 'bcvuser'@'localhost';
+CREATE USER '<bcvuser>'@'localhost' IDENTIFIED BY '<bcvpass>';
+GRANT ALL PRIVILEGES ON * . * TO '<bcvuser>'@'localhost';
 FLUSH PRIVILEGES;
 ctrl + d
-mysql -u bcvuser -p
+mysql -u <bcvuser> -p
 <enter password>
 CREATE DATABASE yourdb;
 ```
@@ -326,11 +326,11 @@ sudo systemctl restart mysql
 - Create remote user and grant privileges (again, change username/password as appropriate for your system)
 ```
 sudo mysql
-CREATE USER 'traccarremoteuser'@'%' IDENTIFIED BY 'traccarremotepass';
-CREATE USER 'traccaruser'@'%' IDENTIFIED BY 'traccarpass';
+CREATE USER '<traccarremoteuser>'@'%' IDENTIFIED BY '<traccarremotepass>';
+CREATE USER '<traccaruser>'@'%' IDENTIFIED BY '<traccarpass>';
 FLUSH PRIVILEGES;
-GRANT ALL PRIVILEGES ON traccardb.* TO 'traccarremoteuser'@'%';
-GRANT ALL PRIVILEGES ON traccardb.* TO 'traccaruser'@'%';
+GRANT ALL PRIVILEGES ON traccardb.* TO '<traccarremoteuser>'@'%';
+GRANT ALL PRIVILEGES ON traccardb.* TO '<traccaruser>'@'%';
 FLUSH PRIVILEGES;
 <ctrl +d>
 ```
@@ -339,11 +339,11 @@ FLUSH PRIVILEGES;
 
 ```
 sudo mysql
-CREATE USER 'bcvremoteuser'@'%' IDENTIFIED BY 'bcvremotepass';
-CREATE USER 'bcvuser'@'%' IDENTIFIED BY 'bcvpass';
+CREATE USER '<bcvremoteuser>'@'%' IDENTIFIED BY '<bcvremotepass>';
+CREATE USER '<bcvuser>'@'%' IDENTIFIED BY '<bcvpass>';
 FLUSH PRIVILEGES;
-GRANT ALL PRIVILEGES ON bcvdb.* TO 'bcvremoteuser'@'%';
-GRANT ALL PRIVILEGES ON bcvdb.* TO 'bcvuser'@'%';
+GRANT ALL PRIVILEGES ON bcvdb.* TO '<bcvremoteuser>'@'%';
+GRANT ALL PRIVILEGES ON bcvdb.* TO '<bcvuser>'@'%';
 FLUSH PRIVILEGES;
 <ctrl +d>
 ```
@@ -724,69 +724,42 @@ git clone https://github.com/databrew/bcv
 cd bcv/shiny
 Rscript set_up_database.R
 cd ../..
-
-cd ~/Documents/bcv;
-git pull;
 cd /srv/shiny-server;
-rm -r bcv;
 mkdir bcv;
-cp ~/Documents/bcv/shiny/app.R bcv/app.R;
-sudo chmod -R 777 bcv;
-sudo systemctl restart shiny-server;
+cd bcv
+mkdir credentials
+cd credentials
+touch credentials.yaml
+# populate with following credentials
+dbname:
+host:
+user:
+pass:
+port:
+traccar_url:
+traccar_user:
+traccar_pass:
+cd ..
+touch app.R
+# Write the following to app.R
+library(bcv); credentials <- yaml::yaml.load_file('credentials/credentials.yaml'); run_app(credentials = credentials)
 
+# at each deploy, remove and re-install package, and re-start shiny server
+sudo su - -c "R -e \"remove.packages('bcv')\"" ; sudo su - -c "R -e \"devtools::install_github('databrew/bcv', dependencies = TRUE, force = TRUE)\""; sudo systemctl restart shiny-server
 ```
 
 # Syncing between the shiny app and the traccar server
 
 - To sync between the shiny server and the traccar server, you can run something like the following in R:
 ```
-library(rtraccar) # devtools::install_github('databrew/rtraccar')
+library(bcv) # devtools::install_github('databrew/bcv')
 library(yaml)
 library(dplyr)
 
 # Read in credentials
 credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
 # You should have this file set up with the user/password of your devices, etc.
-
-# Get users data already registered on the traccar server
-in_shiny <- get_registered_workers(dbname = credentials$dbname,
-                              host = credentials$host,
-                              user = credentials$user,
-                              pass = credentials$pass,
-                              port = credentials$port)
-
-# Get users who have registered on the shiny app
-in_traccar <- get_traccar_data(url = credentials$traccar_url,
-                                     user = credentials$traccar_user,
-                                     pass = credentials$traccar_pass)
-
-# Define a subset of those that are already regiestered in the shiny
-# app, but not yet registered on the traccar server
-need_to_register <- in_shiny %>%
-  filter(!as.numeric(as.character(id)) %in% as.numeric(as.character(in_traccar$uniqueId)))
-
-# Loop through each person and register on traccar
-if(nrow(need_to_register)){
-  go <- TRUE
-} else {
-  go <- FALSE
-}
-if(go){
-  for(i in 1:nrow(need_to_register)){
-    this_row <- need_to_register[i,]
-    this_name <- paste0(this_row$nombre, ' ', this_row$apellido)
-    this_id <- this_row$id
-    message('Trying to add worker ', i, ':')
-    print(need_to_register)
-    post_traccar_data(user = credentials$traccar_user,
-                      pass = credentials$traccar_pass,
-                      name = this_name,
-                      unique_id = this_id,
-                      url = credentials$traccar_url)
-  }
-
-}
-
+sync_workers(credentials = credentials)
 ```
 
 ### Data extraction
@@ -801,7 +774,7 @@ etc.
 
 - The database can be accessed directly:
 ```
-mysql traccardb -u traccaruser -p
+mysql traccardb -u <traccaruser> -p
 <traccarpass>
 show tables;
 select * from tc_positions;
@@ -810,7 +783,7 @@ select * from tc_positions;
 - Remotely:
 
 ```
-mysql -h 1.234.567.890 -u bcvuser -p
+mysql -h 1.234.567.890 -u <bcvuser> -p
 <bcvpass>
 use bcvdb
 ```
