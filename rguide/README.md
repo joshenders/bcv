@@ -46,27 +46,8 @@ credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
 # and the traccar server app
 sync_workers(credentials = credentials)
 #> Workers enrolled:
-#> ---Via Shiny: 117
-#> ---In Traccar: 108
-#> Porting data from the Shiny registration app to the Traccar server:
-#> ---Adding worker 1: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 2: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 3: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 4: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 5: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 6: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 7: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 8: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
-#> ---Adding worker 9: María de la eñaMargaritaMargaritaDanielMartaPaulaIrenePedro JuanMarta Barranqueo morenoGonzálezGonzálezFernandezPomboGuardia MartínezGuerrero LópezReyes MolinaPombo (id: 112113114115116117118119120)
-#> Status code is 200, successful
+#> ---Via Shiny: 119
+#> ---In Traccar: 119
 
 # Get list of registered workers on the server which syncs with the
 # shiny registration app
@@ -128,7 +109,7 @@ location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
 #>   attributes = col_logical(),
 #>   X19 = col_character()
 #> )
-#> Warning: 170 parsing failures.
+#> Warning: 175 parsing failures.
 #> row col   expected     actual         file
 #>   1  -- 19 columns 18 columns <raw vector>
 #>   2  -- 19 columns 18 columns <raw vector>
@@ -190,7 +171,7 @@ generate_report(unique_id = 1,
 #>   attributes = col_logical(),
 #>   X19 = col_character()
 #> )
-#> Warning: 170 parsing failures.
+#> Warning: 175 parsing failures.
 #> row col   expected     actual         file
 #>   1  -- 19 columns 18 columns <raw vector>
 #>   2  -- 19 columns 18 columns <raw vector>
@@ -206,7 +187,7 @@ generate_report(unique_id = 1,
 #> label: unnamed-chunk-5
 #> Assuming "longitude" and "latitude" are longitude and latitude, respectively
 #> output file: report.knit.md
-#> /usr/lib/rstudio/bin/pandoc/pandoc +RTS -K512m -RTS report.utf8.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash+smart --output /home/joebrew/Desktop/example_report.html --email-obfuscation none --self-contained --standalone --section-divs --template /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable 'theme:bootstrap' --include-in-header /tmp/Rtmp0NoMM2/rmarkdown-str1c7d6ec55594.html --mathjax --variable 'mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --lua-filter /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/lua/pagebreak.lua --lua-filter /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/lua/latex-div.lua
+#> /usr/lib/rstudio/bin/pandoc/pandoc +RTS -K512m -RTS report.utf8.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash+smart --output /home/joebrew/Desktop/example_report.html --email-obfuscation none --self-contained --standalone --section-divs --template /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable 'theme:bootstrap' --include-in-header /tmp/Rtmpr6bOCi/rmarkdown-str54a947f75ff8.html --mathjax --variable 'mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --lua-filter /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/lua/pagebreak.lua --lua-filter /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/lua/latex-div.lua
 #> 
 #> Output created: /home/joebrew/Desktop/example_report.html
 ```
