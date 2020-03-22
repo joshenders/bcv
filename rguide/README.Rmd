@@ -100,6 +100,42 @@ location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              unique_id = 1)
+
+# Get reports using a unique id to fetch device id: possible reports - trips, summary, stops, route, events
+
+# by trips
+reports_trips <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'trips',
+                             unique_id = 1)
+# by summary
+reports_summary <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'summary',
+                             unique_id = 1)
+# by stops
+reports_stops <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'stops',
+                             unique_id = 1)
+
+# by trips
+reports_route <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'route',
+                             unique_id = 1)
+
+# by events
+reports_events <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'events',
+                             unique_id = 1)
+
 ```
 
 ```{r, eval = FALSE}
