@@ -83,7 +83,7 @@ sync_workers <- function(credentials = NULL,
       message('---Adding worker ', i, ': ', 
               need_to_register$nombre, ' ',
               need_to_register$apellido, ' ',
-              '(id: ', need_to_register$id, ')')
+              '(id: ', need_to_register$id, '\n)')
       post_traccar_data(user = credentials$traccar_user,
                         pass = credentials$traccar_pass,
                         name = this_name,
