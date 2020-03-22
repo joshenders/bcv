@@ -45,9 +45,6 @@ credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
 # Syncronize between the worker registrationd data (collected via the shiny app)
 # and the traccar server app
 sync_workers(credentials = credentials)
-#> Workers enrolled:
-#> ---Via Shiny: 119
-#> ---In Traccar: 119
 
 # Get list of registered workers on the server which syncs with the
 # shiny registration app
@@ -86,108 +83,17 @@ location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              unique_id = 1)
-#> Warning: Missing column names filled in: 'X19' [19]
-#> Parsed with column specification:
-#> cols(
-#>   accuracy = col_double(),
-#>   address = col_character(),
-#>   altitude = col_double(),
-#>   course = col_double(),
-#>   deviceId = col_double(),
-#>   deviceTime = col_datetime(format = ""),
-#>   fixTime = col_datetime(format = ""),
-#>   id = col_double(),
-#>   latitude = col_double(),
-#>   longitude = col_double(),
-#>   network = col_logical(),
-#>   outdated = col_character(),
-#>   protocol = col_datetime(format = ""),
-#>   serverTime = col_double(),
-#>   speed = col_character(),
-#>   type = col_logical(),
-#>   valid = col_character(),
-#>   attributes = col_logical(),
-#>   X19 = col_character()
-#> )
-#> Warning: 175 parsing failures.
-#> row col   expected     actual         file
-#>   1  -- 19 columns 18 columns <raw vector>
-#>   2  -- 19 columns 18 columns <raw vector>
-#>   3  -- 19 columns 18 columns <raw vector>
-#>   4  -- 19 columns 18 columns <raw vector>
-#>   5  -- 19 columns 18 columns <raw vector>
-#> ... ... .......... .......... ............
-#> See problems(...) for more details.
+```
 
+``` r
 # Generate a report for a worker who tests positive
 # Note: for this function, supply path to credentials, rather than a credentials list
 generate_report(unique_id = 1,
                 credentials_file = '../credentials/credentials.yaml',
                 output_dir = '~/Desktop',
                 output_file = 'example_report.html')
-#> 
-#> 
-#> processing file: report.Rmd
-#>   |                                                                              |                                                                      |   0%  |                                                                              |.........                                                             |  12%
-#>   ordinary text without R code
-#> 
-#>   |                                                                              |..................                                                    |  25%
-#> label: setup (with options) 
-#> List of 1
-#>  $ include: logi FALSE
-#> 
-#>   |                                                                              |..........................                                            |  38%
-#>   ordinary text without R code
-#> 
-#>   |                                                                              |...................................                                   |  50%
-#> label: unnamed-chunk-3
-#> No credentials file found at ../credentials/credentials.yaml
-#> Using the following credentials:
-#>   |                                                                              |............................................                          |  62%
-#>   ordinary text without R code
-#> 
-#>   |                                                                              |....................................................                  |  75%
-#> label: unnamed-chunk-4
-#> Warning: Missing column names filled in: 'X19' [19]
-#> Parsed with column specification:
-#> cols(
-#>   accuracy = col_double(),
-#>   address = col_character(),
-#>   altitude = col_double(),
-#>   course = col_double(),
-#>   deviceId = col_double(),
-#>   deviceTime = col_datetime(format = ""),
-#>   fixTime = col_datetime(format = ""),
-#>   id = col_double(),
-#>   latitude = col_double(),
-#>   longitude = col_double(),
-#>   network = col_logical(),
-#>   outdated = col_character(),
-#>   protocol = col_datetime(format = ""),
-#>   serverTime = col_double(),
-#>   speed = col_character(),
-#>   type = col_logical(),
-#>   valid = col_character(),
-#>   attributes = col_logical(),
-#>   X19 = col_character()
-#> )
-#> Warning: 175 parsing failures.
-#> row col   expected     actual         file
-#>   1  -- 19 columns 18 columns <raw vector>
-#>   2  -- 19 columns 18 columns <raw vector>
-#>   3  -- 19 columns 18 columns <raw vector>
-#>   4  -- 19 columns 18 columns <raw vector>
-#>   5  -- 19 columns 18 columns <raw vector>
-#> ... ... .......... .......... ............
-#> See problems(...) for more details.
-#>   |                                                                              |.............................................................         |  88%
-#>   ordinary text without R code
-#> 
-#>   |                                                                              |......................................................................| 100%
-#> label: unnamed-chunk-5
-#> Assuming "longitude" and "latitude" are longitude and latitude, respectively
-#> output file: report.knit.md
-#> /usr/lib/rstudio/bin/pandoc/pandoc +RTS -K512m -RTS report.utf8.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash+smart --output /home/joebrew/Desktop/example_report.html --email-obfuscation none --self-contained --standalone --section-divs --template /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable 'theme:bootstrap' --include-in-header /tmp/Rtmpr6bOCi/rmarkdown-str54a947f75ff8.html --mathjax --variable 'mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --lua-filter /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/lua/pagebreak.lua --lua-filter /home/joebrew/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/lua/latex-div.lua
-#> 
-#> Output created: /home/joebrew/Desktop/example_report.html
 ```
+
+# How to update the shiny app
+
+    sudo su - -c "R -e \"remove.packages('bcv')\"" ; sudo su - -c "R -e \"devtools::install_github('databrew/bcv', dependencies = TRUE, force = TRUE)\""; sudo systemctl restart shiny-server
