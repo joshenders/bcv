@@ -100,6 +100,46 @@ location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              unique_id = 1)
+
+# Get reports using a unique id to fetch device id: possible reports - trips, summary, stops, route, events
+
+# by trips - each row is a single "trip" with start and stop lat/lon for a given unique id
+reports_trips <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'trips',
+                             unique_id = 1)
+
+# by stops - each row is a reported stop with details on position and time idle. the positionId column can be linked to the startPositionId and endPositionId in "trips"
+reports_stops <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'stops',
+                             unique_id = 1)
+
+# by events - each row is an event : deviceOnline, deviceMoving, deviceStopped, or deviceUnknown
+reports_events <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'events',
+                             unique_id = 1)
+
+# by route - each row is a position (lat/lon) with a time stamp. the id column can be linked 'id' column in "events"
+reports_route <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'route',
+                             unique_id = 1)
+
+
+
+# by summary - returns one row per unique id with a summary of all movents (avg speed, distance, device name, etc)
+reports_summary <- get_reports_from_unique_id(url = credentials$traccar_url,
+                             user = credentials$traccar_user,
+                             pass = credentials$traccar_pass,
+                             report_type = 'summary',
+                             unique_id = 1)
+
 ```
 
 ```{r, eval = FALSE}
