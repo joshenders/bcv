@@ -107,7 +107,7 @@ get_reports_from_device_id <- function(url,
   }
  
 
-  return(out)
+  return(final)
 }
 
 #' Get positions from unique id
