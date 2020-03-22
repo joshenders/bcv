@@ -11,6 +11,10 @@
 
 set_up_database <- function(credentials){
   
+  # Warn
+  readline(prompt="Set up database again. Not normal to do this more than once. Press [enter] to continue")
+  
+  
   # Read in credentials
   credentials <- yaml::yaml.load_file(credentials)
 
@@ -28,7 +32,8 @@ set_up_database <- function(credentials){
                tel = '+34 666 66 80 86',
                email = 'joe@databrew.cc', 
                lugar = 'Casa, Santa Coloma de Queralt',
-               id = 1)
+               id = 1,
+               time_stamp = Sys.time())
   RMySQL::dbWriteTable(conn = con,
                        name = 'users',
                        value = df)
