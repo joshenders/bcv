@@ -6,18 +6,10 @@
   # rm(list=ls(all.names = TRUE))
   
   # Document and reload your package
-  # remove.packages('covid19')
+  # remove.packages('bcv')
   # devtools::install() # if underlying changes to system files
   golem::document_and_reload()
   
-  # Re-capture fresh data from JHU
-  # (Set to true when you want to fetch fresh data, but generally keep to false in 
-  # order to avoid over-pinging the server)
-  refresh <- F
-  if(refresh){
-    source('data-raw/update_data.R', chdir = T)
-  }
-  
   # Run the application
-  run_app()
+  app(credentials = yaml::yaml.load_file('credentials/credentials.yaml'))
   
