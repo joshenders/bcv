@@ -1,0 +1,68 @@
+---
+title: "Locations report"
+output: html_document
+params:
+  unique_id: 2
+  date: !r Sys.Date()
+  credentials_file: 'credentials/credentials.yaml'
+---
+
+```{r setup, include=FALSE}
+library(httr)
+library(tidyverse)
+library(leaflet)
+library(yaml)
+library(bcv)
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE,
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8,
+               fig.height = 6)
+```
+
+```{r}
+# # Read in credentials from file path
+ok <- file.exists(params$credentials_file)
+if(!ok){
+  message('No credentials file found at ', params$credentials_file)
+} else {
+  message('Using credentials file at ', params$credentials_file)
+  credentials <- yaml::yaml.load_file(params$credentials_file)
+}
+
+## Alternative approach: pass object itself
+# credentials <- params$credentials
+message('Using the following credentials:')
+print(credentials)
+```
+
+
+```{r}
+# Get locations data
+df <- get_positions_from_unique_id(url = credentials$traccar_url, 
+                                   user = credentials$traccar_user,
+                                   pass = credentials$traccar_pass,
+                                   unique_id = params$unique_id)
+
+# Get person data
+person <- bcv::get_registered_workers(dbname = credentials$dbname,
+                                      host = credentials$host,
+                                      user = credentials$user,
+                                      pass = credentials$pass,
+                                      port = credentials$port)
+```
+
+```{r}
+m <- leaflet(data = df) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addCircleMarkers() %>%
+  addPolylines(data = df, lng=~longitude, lat=~latitude, group = ~deviceTime, popup = ~deviceTime, color = 'black')
+
+m
+
+```

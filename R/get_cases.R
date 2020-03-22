@@ -1,6 +1,6 @@
-#' Get registered workers
+#' Get cases
 #'
-#' Retrieve registered workers from the database associated wtih the shiny app
+#' Retrieve the table of reported cases
 #' This is NOT part of the traccar suite of tools
 #' @param dbname The name of your database
 #' @param host The host ip address of your database
@@ -14,18 +14,18 @@
 #' @import DBI
 #' @import RMySQL
 
-get_registered_workers <- function(dbname, 
-                                 host, 
-                                 user, 
-                                 pass, 
-                                 port = 3306,
-                                 unique_id = NULL){
+get_cases <- function(dbname, 
+                      host, 
+                      user, 
+                      pass, 
+                      port = 3306,
+                      unique_id = NULL){
   # Example to connect to database:
   creds <- list(dbname = dbname,
                 host = host,
                 user = user,
                 pass = pass)
-
+  
   # Connect to database
   con <- DBI::dbConnect(drv = RMySQL::MySQL(),
                         dbname = creds$dbname,
@@ -33,17 +33,15 @@ get_registered_workers <- function(dbname,
                         user = creds$user,
                         pass = creds$pass,
                         port = port)
-
+  
   if(is.null(unique_id)){
     out = dbGetQuery(conn = con,
-                     "select * FROM users;")
+                     "select * FROM cases;")
   } else {
     out = dbGetQuery(conn = con,
-                     paste0("select * FROM users WHERE id=",
+                     paste0("select * FROM cases WHERE case_id=",
                             unique_id,
                             ";"))
   }
-  
-
   return(out)
 }

@@ -66,15 +66,42 @@ workers <- bcv::get_registered_workers(dbname = credentials$dbname,
                                        user = credentials$user,
                                        pass = credentials$pass)
 
+# Or, get data for just one specified worker
+worker1 <- get_registered_workers(unique_id = 1,
+                                       dbname = credentials$dbname,
+                                       host = credentials$host,
+                                       user = credentials$user,
+                                       pass = credentials$pass)
+
 # Get list of workers whose info has been passed to the traccar server
 traccar <- bcv::get_traccar_data(url = credentials$traccar_url,
                                  user = credentials$traccar_user,
                                  pass = credentials$traccar_pass)
+
+# Get list of registered cases
+cases <- get_cases(dbname = credentials$dbname,
+                   host = credentials$host,
+                   user = credentials$user,
+                   pass = credentials$pass)
+
+# Get case details of just 1 id
+case1 <- get_cases(unique_id = 1,
+                   dbname = credentials$dbname,
+                   host = credentials$host,
+                   user = credentials$user,
+                   pass = credentials$pass)
 
 # Get locations for one person based on their worker ID
 location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              unique_id = 1)
+
+# Generate a report for a worker who tests positive
+# Note: for this function, supply path to credentials, rather than a credentials list
+generate_report(unique_id = 1,
+                credentials_file = '../credentials/credentials.yaml',
+                output_dir = '~/Desktop',
+                output_file = 'example_report.html')
 ```
 
