@@ -6,7 +6,11 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+  comment = NA, 
+               # echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -96,12 +100,20 @@ location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              unique_id = 1)
+```
 
+```{r, eval = FALSE}
 # Generate a report for a worker who tests positive
 # Note: for this function, supply path to credentials, rather than a credentials list
 generate_report(unique_id = 1,
                 credentials_file = '../credentials/credentials.yaml',
                 output_dir = '~/Desktop',
                 output_file = 'example_report.html')
+```
+
+# How to update the shiny app
+
+```
+sudo su - -c "R -e \"remove.packages('bcv')\"" ; sudo su - -c "R -e \"devtools::install_github('databrew/bcv', dependencies = TRUE, force = TRUE)\""; sudo systemctl restart shiny-server
 ```
 

@@ -29,7 +29,8 @@ app <- function(credentials){
                  apellido,
                  tel,
                  email, 
-                 lugar)
+                 lugar,
+                 time_stamp = Sys.time())
     # Get new number
     old <- dbGetQuery(conn = con,
                       "select MAX(id) FROM users;")
@@ -55,7 +56,8 @@ app <- function(credentials){
     df <- tibble(case_id,
                  case_name,
                  case_date_symptoms,
-                 case_date_dx)
+                 case_date_dx,
+                 time_stamp = Sys.time())
     out <- dbWriteTable(conn = con,
                         name = 'cases',
                         value = df,
@@ -124,13 +126,13 @@ app <- function(credentials){
             intensity = 10,
             hover = TRUE,
             f7Card(
-              
-              uiOutput('report_ui'),
               title = "Report case | Informar de un caso",
-              # footer = tagList(
-              #   f7Button(color = "blue", label = "Databrew LLC", src = "https://www.databrew.cc"),
-              #   f7Button(color = 'blue', label = 'BCV', src = 'https://github.com/databrew/bcv')
-              # )
+              uiOutput('report_ui'),
+              
+              footer = tagList(
+                f7Button(color = "blue", label = "Databrew LLC", src = "https://www.databrew.cc"),
+                f7Button(color = 'blue', label = 'BCV', src = 'https://github.com/databrew/bcv')
+              )
             )
           )
         )
@@ -235,13 +237,13 @@ app <- function(credentials){
         )
       } else {
         fluidPage(
-
+          f7Text('user', 'Username'),
           f7Text('pass', 'Password'),
           f7Button('log_in', 'Log in', 
                    rounded = TRUE),
-          h5('Para poder informar de un caso, hay que ser "administrador" con nombre de usuario y contraseña. Si necesitas informar de un caso y no tienes nombre de usuario/contraseña: help@databrew.cc'),
-          h6('In order to be able to report a case, you must have an administrator username / password. If you need one, email help@databrew.cc'),
-          f7Text('user', 'Username')
+          br(),
+          p('Para poder informar de un caso, hay que ser "administrador" con nombre de usuario y contraseña. Si necesitas informar de un caso y no tienes nombre de usuario/contraseña: help@databrew.cc'),
+          p('In order to be able to report a case, you must have an administrator username / password. If you need one, email help@databrew.cc')
         )
       }
     })
