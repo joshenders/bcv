@@ -25,7 +25,7 @@ opts_chunk$set(comment = NA,
                fig.height = 6)
 ```
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 # # Read in credentials from file path
 creds <- params$credentials_file
 ok <- file.exists(creds)
@@ -37,12 +37,10 @@ if(!ok){
 }
 ## Alternative approach: pass object itself
 # credentials <- params$credentials
-message('Using the following credentials:')
-print(credentials)
 ```
 
 ```{r}
-credentials <- read_yaml('credentials/credentials.yaml')
+# credentials <- read_yaml('credentials/credentials.yaml')
 
 ```
 
@@ -239,5 +237,5 @@ m <- get_worker_stops(df = reports_stops, all_days = TRUE)
 m <- get_worker_stops(df = reports_stops, all_days = FALSE, which_days = c('2020-03-23'))
 m <- get_worker_stops(df = reports_stops, all_days = FALSE, which_days = c('2020-03-22', '2020-03-23'))
 
-
+m
 ```
