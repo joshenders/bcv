@@ -45,7 +45,7 @@ generate_report <- function(unique_id = NULL,
 
   # Combine parameters into a list, so as to pass to Rmd
   parameters <- list(unique_id = unique_id,
-                     credentials_file = credentials_file,
+                     credentials_file = paste0(getwd(), '/', credentials_file),
                      date = date)
 
   # Find location the rmd to knit
