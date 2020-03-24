@@ -34,13 +34,16 @@ cases <- get_cases(dbname = credentials$dbname,
                    user = credentials$user,
                    pass = credentials$pass)
 
-# Get case details of just 1 id
-case1 <- get_cases(unique_id = 1,
-                   dbname = credentials$dbname,
-                   host = credentials$host,
-                   user = credentials$user,
-                   pass = credentials$pass)
-
 message('CASES ARE:')
 print(cases)
+
+# Generate a report for each case
+for(i in 1:nrow(cases)){
+  # Get case details of just 1 id
+  case1 <- get_cases(unique_id = 1,
+                     dbname = credentials$dbname,
+                     host = credentials$host,
+                     user = credentials$user,
+                     pass = credentials$pass)
+}
 
