@@ -25,22 +25,26 @@ opts_chunk$set(comment = NA,
                fig.height = 6)
 ```
 
-```{r}
+```{r, eval = FALSE}
 # # Read in credentials from file path
-ok <- file.exists(params$credentials_file)
+creds <- params$credentials_file
+ok <- file.exists(creds)
 if(!ok){
-  message('No credentials file found at ', params$credentials_file)
+  message('No credentials file found at ', creds)
 } else {
-  message('Using credentials file at ', params$credentials_file)
-  credentials <- yaml::yaml.load_file(params$credentials_file)
+  message('Using credentials file at ', creds)
+  credentials <- yaml::yaml.load_file(unlist(creds))
 }
-
 ## Alternative approach: pass object itself
 # credentials <- params$credentials
 message('Using the following credentials:')
 print(credentials)
 ```
 
+```{r}
+credentials <- read_yaml('credentials/credentials.yaml')
+
+```
 
 ```{r}
 # Get locations data
@@ -54,51 +58,8 @@ person <- bcv::get_registered_workers(dbname = credentials$dbname,
                                       host = credentials$host,
                                       user = credentials$user,
                                       pass = credentials$pass,
-                                      port = credentials$port)
-# Read in credentials
-credentials <- yaml::yaml.load_file('../credentials/credentials.yaml')
-
-# Syncronize between the worker registrationd data (collected via the shiny app)
-# and the traccar server app
-sync_workers(credentials = credentials)
-
-# Get list of registered workers on the server which syncs with the
-# shiny registration app
-workers <- bcv::get_registered_workers(dbname = credentials$dbname,
-                                       host = credentials$host,
-                                       user = credentials$user,
-                                       pass = credentials$pass)
-
-# Or, get data for just one specified worker
-worker1 <- get_registered_workers(unique_id = 1,
-                                       dbname = credentials$dbname,
-                                       host = credentials$host,
-                                       user = credentials$user,
-                                       pass = credentials$pass)
-
-# Get list of workers whose info has been passed to the traccar server
-traccar <- bcv::get_traccar_data(url = credentials$traccar_url,
-                                 user = credentials$traccar_user,
-                                 pass = credentials$traccar_pass)
-
-# Get list of registered cases
-cases <- get_cases(dbname = credentials$dbname,
-                   host = credentials$host,
-                   user = credentials$user,
-                   pass = credentials$pass)
-
-# Get case details of just 1 id
-case1 <- get_cases(unique_id = 1,
-                   dbname = credentials$dbname,
-                   host = credentials$host,
-                   user = credentials$user,
-                   pass = credentials$pass)
-
-# Get locations for one person based on their worker ID
-location_history <- get_positions_from_unique_id(url = credentials$traccar_url,
-                             user = credentials$traccar_user,
-                             pass = credentials$traccar_pass,
-                             unique_id = 1)
+                                      port = credentials$port,
+                                      unique_id = params$unique_id)
 
 # Get reports using a unique id to fetch device id: possible reports - trips, summary, stops, route, events
 
@@ -107,28 +68,28 @@ reports_trips <- get_reports_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              report_type = 'trips',
-                             unique_id = 1)
+                             unique_id = params$unique_id)
 
 # by stops - each row is a reported stop with details on position and time idle. the positionId column can be linked to the startPositionId and endPositionId in "trips"
 reports_stops <- get_reports_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              report_type = 'stops',
-                             unique_id = 2)
+                             unique_id = params$unique_id)
 
 # by events - each row is an event : deviceOnline, deviceMoving, deviceStopped, or deviceUnknown
 reports_events <- get_reports_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              report_type = 'events',
-                             unique_id = 1)
+                             unique_id = params$unique_id)
 
 # by route - each row is a position (lat/lon) with a time stamp. the id column can be linked 'id' column in "events"
 reports_route <- get_reports_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              report_type = 'route',
-                             unique_id = 1)
+                             unique_id = params$unique_id)
 
 
 
@@ -137,7 +98,7 @@ reports_summary <- get_reports_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              report_type = 'summary',
-                             unique_id = 1)
+                             unique_id = params$unique_id)
 ```
 
 ## View all days of tracking history
