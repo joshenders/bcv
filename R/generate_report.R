@@ -8,6 +8,7 @@
 #' @param output_dir The directory to which the file should be written. If
 #' \code{NULL} (the default), the current working directory will be used.
 #' @param output_file The name of the file to be written.
+#' @param which_days A date of a vector of dates to view on the report
 #' @return An html will be written
 #' @importFrom rmarkdown render
 #' @export
@@ -16,7 +17,8 @@ generate_report <- function(unique_id = NULL,
                             credentials_file = NULL,
                            date = NULL,
                            output_dir = NULL,
-                           output_file = NULL){
+                           output_file = NULL,
+                           which_days = NULL){
   
   # Credentials handling
   if(is.null(credentials_file)){
@@ -42,11 +44,17 @@ generate_report <- function(unique_id = NULL,
   if(is.null(date)){
     date <- Sys.Date()
   }
+  
+  # If not date, use today's
+  if(is.null(which_days)){
+    which_days <- Sys.Date()
+  }
 
   # Combine parameters into a list, so as to pass to Rmd
   parameters <- list(unique_id = unique_id,
                      credentials_file = paste0(getwd(), '/', credentials_file),
-                     date = date)
+                     date = date,
+                     which_days = which_days)
 
   # Find location the rmd to knit
   file_to_knit <-
