@@ -2,7 +2,8 @@
 title: "Locations report"
 output: html_document
 params:
-  which_days: !r Sys.Date()
+  which_day: !r Sys.Date()
+  num_previous_days: 7
   unique_id: 2
   date: !r Sys.Date()
   credentials_file: 'credentials/credentials.yaml'
@@ -13,6 +14,7 @@ library(httr)
 library(tidyverse)
 library(leaflet)
 library(yaml)
+library(shiny)
 library(bcv)
 # Basic knitr options
 library(knitr)
@@ -42,200 +44,284 @@ if(!ok){
 
 
 ```{r}
-
 # Get locations data
-df <- get_positions_from_unique_id(url = credentials$traccar_url, 
+df <- try(get_positions_from_unique_id(url = credentials$traccar_url, 
                                    user = credentials$traccar_user,
                                    pass = credentials$traccar_pass,
-                                   unique_id = params$unique_id)
+                                   unique_id = params$unique_id), silent = TRUE)
 
 # Get person data
-person <- bcv::get_registered_workers(dbname = credentials$dbname,
+person <- try(bcv::get_registered_workers(dbname = credentials$dbname,
                                       host = credentials$host,
                                       user = credentials$user,
                                       pass = credentials$pass,
                                       port = credentials$port,
-                                      unique_id =params$unique_id)
+                                      unique_id =params$unique_id), silent = TRUE)
 
 # Get reports using a unique id to fetch device id: possible reports - trips, summary, stops, route, events
 
-# by trips - each row is a single "trip" with start and stop lat/lon for a given unique id
-reports_trips <- get_reports_from_unique_id(url = credentials$traccar_url,
-                             user = credentials$traccar_user,
-                             pass = credentials$traccar_pass,
-                             report_type = 'trips',
-                             unique_id = params$unique_id)
-
 # by stops - each row is a reported stop with details on position and time idle. the positionId column can be linked to the startPositionId and endPositionId in "trips"
-reports_stops <- get_reports_from_unique_id(url = credentials$traccar_url,
+reports_stops <- try(get_reports_from_unique_id(url = credentials$traccar_url,
                              user = credentials$traccar_user,
                              pass = credentials$traccar_pass,
                              report_type = 'stops',
-                             unique_id = params$unique_id)
+                             unique_id = params$unique_id), silent = TRUE)
+
+# check that there is data for the dates chosen and id selected
+if('try-error' %in% class(df)){
+  show_plot_1 <- FALSE
+} else {
+  df_date_vector <- as.Date(strftime(df$deviceTime, tz = 'UTC', format = "%Y-%m-%d"))
+  first_date <- params$which_day - params$num_previous_days
+  if(params$which_day %in% df_date_vector & first_date %in% df_date_vector){
+    show_plot_1 <- TRUE
+  } else {
+    show_plot_1 <- FALSE
+  }
+}
+
+if('try-error' %in% class(reports_stops)){
+  show_plot_2 <- FALSE
+} else {
+  stops_date_vector <- as.Date(strftime(reports_stops$startTime, format = "%Y-%m-%d"))
+  first_date <- params$which_day - params$num_previous_days
+  if(params$which_day %in% stops_date_vector & first_date %in% stops_date_vector){
+    show_plot_2 <- TRUE
+  } else {
+    show_plot_2 <- FALSE
+  }
+}
 
 ```
 
 ```{r}
 
-# get dates without time
-df$date <- as.Date(strftime(df$deviceTime, tz = 'UTC', format = "%Y-%m-%d"))
+if(show_plot_1){
+  # get dates without time
+  df$date <- as.Date(strftime(df$deviceTime, tz = 'UTC', format = "%Y-%m-%d"))
+  
+  # get hours
+  df$hour <- strftime(df$deviceTime, tz = 'UTC', format = "%H")
+  
+  # this function takes the locations data frame and arguments to show all days, a subset of days, or one day (in this case it visualizes the hour of the day instead of the date)
+  get_worker_routes <- function(df = df, which_day = params$which_day, num_previous_days = params$num_previous_days){
+    # define a color function
+    colfunc <- colorRampPalette(c("yellow", "red"))
+    # get the start date
+    start_date <- which_day - num_previous_days
+    
+    # if multiple days are selected
+    if(start_date != which_day){
+      df_dates <- df %>% filter(date>=start_date & date<= which_day)
+      # get colors  
+      df_dates$colors <- colfunc(nrow(df_dates))
+      # create a dataframe for the leaflet legend
+      time_legend <- df_dates %>% group_by(date) %>% summarise(counts = n())
+      time_legend$colors <- colfunc(nrow(time_legend))
+      plot_title <- 'Routes for:'
+      
+      # create plot by looping through dates and setting line color and cirle color to the dates
+      date_vector <- unique(df_dates$date)
+      m <- leaflet() %>%
+        addTiles()   # Add default OpenStreetMap map tiles
+      for(i in 1:length(date_vector)){
+        this_date <- date_vector[i]
+        df_dates_sub <- df_dates %>% filter(date == this_date)
+        
+        m <- addCircleMarkers(map = m, 
+                              color = df_dates_sub$colors, 
+                              lng=df_dates_sub$longitude, 
+                              lat=df_dates_sub$latitude, 
+                              radius = 4, 
+                              opacity = 1) 
+        m <-  addPolylines(map = m,
+                           color = df_dates_sub$colors, 
+                           lng=df_dates_sub$longitude, 
+                           lat=df_dates_sub$latitude, 
+                           weight = 1) 
+      }
+      m <- m %>% addLegend(data = time_legend, 
+                           'bottomright', 
+                           colors = ~colors, 
+                           labels = ~date,
+                           title = plot_title)
+    } else {
+      # subset data by which_day
+      df_dates <- df %>% filter(date == which_day)
+      # create a dataframe for legend
+      time_legend <- df_dates %>% group_by(hour) %>% summarise(counts = n())
+      time_legend$colors <- colfunc(nrow(time_legend)) 
+      plot_title <- paste0('Routes for ', which_day, ' by hour')
+      
+      # join with df_dates, so that we have a unique color for each hour
+      df_dates <- left_join(df_dates, time_legend, by = 'hour')
+      time_legend$hour <- paste0(time_legend$hour, ':00 UTC')
+      
+      # create plot by looping through dates and setting line color and cirle color to the dates
+      hour_vector <- unique(df_dates$hour)
+      m <- leaflet() %>%
+        addTiles()   # Add default OpenStreetMap map tiles
+      for(i in 1:length(hour_vector)){
+        this_hour <- hour_vector[i]
+        df_hour_sub <- df_dates %>% filter(hour == this_hour)
+        m <- addCircleMarkers(map = m, 
+                              color = df_hour_sub$colors, 
+                              lng=df_hour_sub$longitude,
+                              lat=df_hour_sub$latitude, 
+                              radius = 4,
+                              opacity = 1) 
+        m <-  addPolylines(map = m, 
+                           color = df_hour_sub$colors, 
+                           lng=df_hour_sub$longitude, 
+                           lat=df_hour_sub$latitude, 
+                           weight = 1) 
+      }
+      m <- m %>% addLegend(data = time_legend, 
+                           'bottomright', 
+                           colors = ~colors, 
+                           labels = ~hour, 
+                           title = plot_title)
+    }
+    return(m)
+  }
+}
 
-# get hours
-df$hour <- strftime(df$deviceTime, tz = 'UTC', format = "%H")
 
-# this function takes the locations data frame and arguments to show all days, a subset of days, or one day (in this case it visualizes the hour of the day instead of the date)
-get_worker_routes <- function(df = df, all_days, which_days = params$which_days){
+```
+
+### Routes
+
+```{r}
+# if data exits, get plot, otherwise error message
+if(show_plot_1){
+ shiny::h2("Routes")
+  get_worker_routes(df = df)
+} else {
+ shiny::h2("No location data for that ID number or specifed date range")
+}
+```
+
+
+
+```{r}
+# run code if data for stops exists
+if(show_plot_2){
   # define a color function
   colfunc <- colorRampPalette(c("yellow", "red"))
+  
+  # convert startime and endtime to date object
+  new_start_time <- gsub(pattern = 'T', replacement = ' ', reports_stops$startTime)
+  reports_stops$startTime <- as.POSIXct(new_start_time, tz = 'UTC', format = '%Y-%m-%d %H:%M:%S')
+  
+  new_end_time <- gsub(pattern = 'T', replacement = ' ', reports_stops$endTime)
+  reports_stops$endTime <- as.POSIXct(new_end_time, tz = 'UTC', format = '%Y-%m-%d %H:%M:%S')
+  
+  # createa a new duration column (currently duration column in ambiguous format)
+  reports_stops$new_duration <- as.numeric(reports_stops$endTime - reports_stops$startTime)
+  
+  # get dates without time
+  reports_stops$date <- as.Date(strftime(reports_stops$startTime, tz = 'UTC', format = "%Y-%m-%d"))
+  
+  # get hours
+  reports_stops$hour <- strftime(reports_stops$startTime, tz = 'UTC', format = "%H")
+  
+  # create a variable called duration_label to visualize on the map
+  reports_stops$duration_label <- paste0(round(reports_stops$new_duration/60), ' hour(s)')
 
-  if(all_days){
-    # get colors  
-    df$colors <- colfunc(nrow(df))
-    # create a dataframe for the leaflet legend
-    time_legend <- df %>% group_by(date) %>% summarise(counts = n())
-    time_legend$colors <- colfunc(nrow(time_legend))
-    plot_title <- 'Routes for all days available'
+  # convert lat/lon to numeric
+  reports_stops$latitude <- as.numeric(reports_stops$latitude)
+  reports_stops$longitude <- as.numeric(reports_stops$longitude)
+  
+  # this function takes the reports_stops data frame and arguments to show all days, a subset of days, or one day (in this case it visualizes the hour of the day instead of the date)
+  get_worker_stops <- function(df = reports_stops, which_day = params$which_day, num_previous_days= params$num_previous_days){
+    # define a color function
+    colfunc <- colorRampPalette(c("yellow", "red"))
     
-    # create plot
-    m <- leaflet(data = df) %>%
-      addTiles() %>%  # Add default OpenStreetMap map tiles
-      addCircleMarkers(color = ~colors) %>%
-      addPolylines(data = df, lng=~longitude, lat=~latitude, weight = 1) %>%
-      addLegend(data = time_legend, 'bottomright', colors = ~colors, labels = ~date, title = plot_title)
+    # get start date
+    start_date <- which_day - num_previous_days
     
-  } else {
-    # subset data by which_days
-    days_string <- paste0(which_days, collapse = '|')
-    df_days <- df %>% filter(grepl(days_string, date))
-    df_days$colors <- colfunc(nrow(df_days))
-    m <- leaflet(data = df_days) %>%
-      addTiles() %>%  # Add default OpenStreetMap map tiles
-      addCircleMarkers(color = ~colors) %>%
-      addPolylines(data = df_days, lng=~longitude, lat=~latitude, weight = 1)
-    
-    # if more than one date chosen visualize dates, otherwise visualize hours
-    if(length(which_days) > 1){
+    # if multiple days 
+    if(start_date != which_day){
+      
+      # get date trange
+      df_dates <- df %>% filter(date>=start_date & date<= which_day)
+      # get colors  
+      df_dates$colors <- colfunc(nrow(df_dates))
       # create a dataframe for the leaflet legend
-      time_legend <- df_days %>% group_by(date) %>% summarise(counts = n())
+      time_legend <- df_dates %>% group_by(date) %>% summarise(counts = n())
       time_legend$colors <- colfunc(nrow(time_legend))
-      plot_title <- paste0('Routes for ')
-      m <- m %>%   addLegend(data = time_legend, 'bottomright', colors = ~colors, labels = ~date, title = plot_title)
+      plot_title <- 'Stops for:'
+      
+      # create plot by looping through dates and setting line color and cirle color to the dates
+      date_vector <- unique(df_dates$date)
+      m <- leaflet() %>%
+        addTiles()   # Add default OpenStreetMap map tiles
+      for(i in 1:length(date_vector)){
+        this_date <- date_vector[i]
+        df_dates_sub <- df_dates %>% filter(date == this_date)
+        m <- addCircleMarkers(map = m, 
+                              color = df_dates_sub$colors, 
+                              lng=df_dates_sub$longitude, 
+                              lat=df_dates_sub$latitude, opacity = 1, 
+                              radius = sqrt(df_dates_sub$new_duration), 
+                              label = df_dates_sub$duration_label,  labelOptions = labelOptions(noHide = F, direction = 'top')) 
+      }
+      m <- m %>% addLegend(data = time_legend, 'bottomright', 
+                           colors = ~colors, labels = ~date, 
+                           title = plot_title)
     } else {
-      time_legend <- df_days %>% group_by(hour) %>% summarise(counts = n())
+      # subset data by which_day
+      df_dates <- df %>% filter(date == which_day)
+      
+      # get legend data
+      time_legend <- df_dates %>% group_by(hour) %>% summarise(counts = n())
       time_legend$colors <- colfunc(nrow(time_legend)) 
-      plot_title <- paste0('All routes for ', which_days, ' by hour')
-      time_legend$hour <- paste0(time_legend$hour, ':00 UTC')
-      m <- m %>%   addLegend(data = time_legend, 'bottomright', colors = ~colors, labels = ~hour, title = plot_title)
-    }
-  }
-  return(m)
-}
-
-```
-
-## All days of tracking history
-```{r}
-get_worker_routes(df = df, all_days = TRUE)
-```
-
-## One or multiple days of tracking history
-
-```{r}
-get_worker_routes(df = df, all_days = FALSE)
-```
-
-
-```{r}
-# define a color function
-colfunc <- colorRampPalette(c("yellow", "red"))
-
-# convert startime to date object
-new_start_time <- gsub(pattern = 'T', replacement = ' ', reports_stops$startTime)
-reports_stops$startTime <- as.POSIXct(new_start_time, tz = 'UTC', format = '%Y-%m-%d %H:%M:%S')
-
-new_end_time <- gsub(pattern = 'T', replacement = ' ', reports_stops$endTime)
-reports_stops$endTime <- as.POSIXct(new_end_time, tz = 'UTC', format = '%Y-%m-%d %H:%M:%S')
-
-# createa a new duration column (currently duration column in ambiguous format)
-reports_stops$new_duration <- as.numeric(reports_stops$endTime - reports_stops$startTime)
-
-# get dates without time
-reports_stops$date <- as.Date(strftime(reports_stops$startTime, tz = 'UTC', format = "%Y-%m-%d"))
-
-# get hours
-reports_stops$hour <- strftime(reports_stops$startTime, tz = 'UTC', format = "%H")
-
-# create a variable called duration_label to visualize on the map
-reports_stops$duration_label <- paste0(round(reports_stops$new_duration/60), ' min')
-      
-
-# convert lat/lon to numeric
-reports_stops$latitude <- as.numeric(reports_stops$latitude)
-reports_stops$longitude <- as.numeric(reports_stops$longitude)
-
-# this function takes the reports_stops data frame and arguments to show all days, a subset of days, or one day (in this case it visualizes the hour of the day instead of the date)
-get_worker_stops <- function(dat = reports_stops, all_days = TRUE, which_days = params$which_days){
-  if(all_days){
-    # get colors  
-    dat$colors <- colfunc(nrow(dat))
-    # create a dataframe for the leaflet legend
-    time_legend <- dat %>% group_by(date) %>% summarise(counts = n())
-    time_legend$colors <- colfunc(nrow(time_legend))
-    plot_title <- 'All days available'
-    m <- leaflet(data = dat) %>%
-      addTiles() %>%  # Add default OpenStreetMap map tiles
-      addCircleMarkers(lng=~longitude, lat=~latitude, color = ~colors, radius = ~sqrt(new_duration)) %>%
-      addLegend(data = time_legend, 'bottomright', colors = ~colors, labels = ~date, title = plot_title)
-  } else {
-    # if more than one date chosen, show dates, otherwise hours
-    if(length(which_days) > 1){
-      # subset by days
-      days_string <- paste0(which_days, collapse = '|')
-      dat_days <- dat %>% filter(grepl(days_string, date))
-      # create data frame to get unique color for each day (hacky)
-      color_data <- data_frame(colors = colfunc(length(which_days)), date = as.Date(which_days))
-      # join with data
-      dat_days <- left_join(dat_days, color_data, by ='date' )  
-      # create dataframe for legend
-      time_legend <- dat_days %>% group_by(date) %>% summarise(counts = n())
-      time_legend$colors <- colfunc(nrow(time_legend))
-      plot_title <- paste0('All stops for ')
-      m <- leaflet(data = dat_days) %>%
-        addTiles() %>%  # Add default OpenStreetMap map tiles
-        addCircleMarkers(lng=~longitude, lat=~latitude,color = ~colors, radius = ~sqrt(new_duration), label = ~duration_label,  labelOptions = labelOptions(noHide = T, direction = 'top')) %>% 
-        addLegend(data = time_legend, 'bottomright', colors = ~colors, labels = ~date, title = plot_title)
-      
-    } else {
-      # subset by day
-      days_string <- paste0(which_days, collapse = '|')
-      dat_days <- dat %>% filter(grepl(days_string, date))
-      
-      # create dataframe for legend
-      time_legend <- dat_days %>% group_by(hour) %>% summarise(counts = n())
-      time_legend$colors <- colfunc(nrow(time_legend)) 
-      plot_title <- paste0('All stops for ', which_days, ' by hour')
-      dat_days$colors <- colfunc(nrow(dat_days))
+      plot_title <- paste0('Stops for ', which_day, ' by hour:')
+       
+      # joine df_dates and legend data to get unique colors for each hour
+      df_dates <- left_join(df_dates, time_legend, by = 'hour')
+      # label hour for legend
       time_legend$hour <- paste0(time_legend$hour, ':00 UTC')
       
-      m <- leaflet(data = dat_days) %>%
-        addTiles() %>%  # Add default OpenStreetMap map tiles
-        addCircleMarkers(lng=~longitude, lat=~latitude,radius = ~sqrt(new_duration), color = ~colors, label = ~duration_label,  labelOptions = labelOptions(noHide = T, direction = 'top')) %>% 
-        addLegend(data = time_legend, 'bottomright', colors = time_legend$colors, labels = time_legend$hour,title = plot_title)
+      # create plot by looping through hours and setting line color and cirle color to the dates
+      hour_vector <- unique(df_dates$hour)
+      m <- leaflet() %>%
+        addTiles()   # Add default OpenStreetMap map tiles
+      for(i in 1:length(hour_vector)){
+        this_hour <- hour_vector[i]
+        df_hour_sub <- df_dates %>% filter(hour == this_hour)
+        m <-addCircleMarkers(map = m, 
+                             color = df_hour_sub$colors, 
+                             lng=df_hour_sub$longitude, 
+                             lat=df_hour_sub$latitude, 
+                             opacity = 1, 
+                             radius = sqrt(df_hour_sub$new_duration), 
+                             label = df_hour_sub$duration_label,  
+                             labelOptions = labelOptions(noHide = F, direction = 'top'))  
+      }
+      m <- m %>% addLegend(data = time_legend, 
+                           'bottomright', 
+                           colors = ~colors, 
+                           labels = ~hour, 
+                           title = plot_title)
     }
+    return(m)
   }
-  return(m)
 }
 
+
 ```
 
-## All stops since tracking started
+### Stops
 
 ```{r}
-get_worker_stops(dat = reports_stops, all_days = TRUE)
+# if data exists for stops, show plot, otherwise error message
+if(show_plot_2){
+  shiny::h2("Stops")
+ get_worker_stops(df = reports_stops)
+} else {
+  shiny::h2("No stop data for that ID number or specifed date range")
+}
 ```
 
-## All stops from a subset of days
 
-```{r}
-get_worker_stops(dat = reports_stops, all_days = FALSE)
-```
