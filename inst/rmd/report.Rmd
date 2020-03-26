@@ -246,11 +246,12 @@ if(show_plot_2){
       # get date trange
       df_dates <- df %>% filter(date>=start_date & date<= which_day)
       # get colors  
-      df_dates$colors <- colfunc(nrow(df_dates))
+      # df_dates$colors <- colfunc(nrow(df_dates))
       # create a dataframe for the leaflet legend
       time_legend <- df_dates %>% group_by(date) %>% summarise(counts = n())
       time_legend$colors <- colfunc(nrow(time_legend))
       plot_title <- 'Stops for:'
+      df_dates <- left_join(df_dates, time_legend, by = 'date')
       
       # create plot by looping through dates and setting line color and cirle color to the dates
       date_vector <- unique(df_dates$date)
@@ -267,7 +268,7 @@ if(show_plot_2){
                               label = df_dates_sub$duration_label,  labelOptions = labelOptions(noHide = F, direction = 'top')) 
       }
       m <- m %>% addLegend(data = time_legend, 'bottomright', 
-                           colors = ~colors, labels = ~date, 
+                           colors = time_legend$colors, labels = time_legend$date, 
                            title = plot_title)
     } else {
       # subset data by which_day
@@ -301,8 +302,8 @@ if(show_plot_2){
       }
       m <- m %>% addLegend(data = time_legend, 
                            'bottomright', 
-                           colors = ~colors, 
-                           labels = ~hour, 
+                           colors = time_legend$colors, 
+                           labels = time_legend$hour, 
                            title = plot_title)
     }
     return(m)
