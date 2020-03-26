@@ -9,7 +9,8 @@ generate_report(
   credentials_file = NULL,
   date = NULL,
   output_dir = NULL,
-  output_file = NULL
+  output_file = NULL,
+  which_days = NULL
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ default), the current date will be used}
 \code{NULL} (the default), the current working directory will be used.}
 
 \item{output_file}{The name of the file to be written.}
+
+\item{which_days}{A date of a vector of dates to view on the report}
 }
 \value{
 An html will be written
